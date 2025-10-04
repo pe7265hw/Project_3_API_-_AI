@@ -24,7 +24,7 @@ def retrieve_recipe_ids(key_input, name_input):
    
 def main():
     key = retrieve_key()
-    food_id_all = retrieve_recipe_ID(key, 'vanilla cake')
+    food_id_all = retrieve_recipe_ids(key, 'vanilla cake')
     pprint(food_id_all)
 
 main()
