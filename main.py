@@ -13,11 +13,18 @@ def retrieve_recipe_ID(key_input, name_input):
     query = {'titleMatch': name_input, 'apiKey': key_input}
 
     data = requests.get(url, params=query).json()
-    return data
+    recipe_results = data['results']
+
+    all_recipe_id = []
+
+    for id in recipe_results:
+        recipe_id = id['id']
+        all_recipe_id.append(recipe_id)
+    return all_recipe_id
    
 def main():
     key = retrieve_key()
-    food_id = retrieve_recipe_ID(key, 'vanilla cake')
-    pprint(food_id)
+    food_id_all = retrieve_recipe_ID(key, 'vanilla cake')
+    pprint(food_id_all)
 
 main()
