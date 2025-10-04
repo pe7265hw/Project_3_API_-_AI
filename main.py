@@ -7,8 +7,8 @@ def retrieve_key():
     key = os.environ.get('SPOONACULAR_KEY')
     return key
 
-def retrieve_recipe_ID(key_input, name_input):
-    """Retrieves recipe ID from API based on recipe name provided by AI"""
+def retrieve_recipe_ids(key_input, name_input):
+    """Retrieves all recipe IDs from API based on recipe name provided by AI"""
     url = 'https://api.spoonacular.com/recipes/complexSearch?'
     query = {'titleMatch': name_input, 'apiKey': key_input}
 
