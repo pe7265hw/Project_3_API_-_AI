@@ -25,7 +25,12 @@ def retrieve_recipe_ids(key_input, name_input):
 #determine if what output needs to be
 def retrieve_recipes(key_input, id_input):
     """Retrieves the recipes based on list of id and formatted for workable output"""
+    url = f'https://api.spoonacular.com/recipes/{id_input}/information?'
+    query = {'includeNutrition': 'false', 'addWinePairing': 'false', 'addTastedata': 'false', 
+             'apiKey': key_input}
 
+    data = requests.get(url, params=query).json()
+    return data
 
 def main():
     key = retrieve_key()
