@@ -21,10 +21,15 @@ def retrieve_recipe_ids(key_input, name_input):
         recipe_id = id['id']
         all_recipe_id.append(recipe_id)
     return all_recipe_id
-   
+
+#determine if what output needs to be
+def retrieve_recipes(key_input, id_input):
+    """Retrieves the recipes based on list of id and formatted for workable output"""
+
+
 def main():
     key = retrieve_key()
     food_id_all = retrieve_recipe_ids(key, 'vanilla cake')
-    pprint(food_id_all)
+    
 
 main()
