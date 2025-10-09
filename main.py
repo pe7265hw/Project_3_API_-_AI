@@ -1,14 +1,11 @@
-import requests
-import os
-from pprint import pprint
-import json
 from api_logic import query_api as api
 
 
 
 def main():
-    key = retrieve_key()
-    food_id_all = retrieve_recipe_ids(key, 'vanilla cake')
-    retrieve_recipes(key, food_id_all)
+    key = api.retrieve_key()
+    recipe_all = api.query_api_ids(key, 'vanilla cake')
+    all_id = api.append_recipe_id(recipe_all)
+    api.retrieve_recipes(key, all_id)
 
 main()
