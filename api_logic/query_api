@@ -1,0 +1,37 @@
+import requests
+import os
+
+def retrieve_key():
+    """Retrieves API key"""
+    key = os.environ.get('SPOONACULAR_KEY')
+    return key
+
+def retrieve_recipe_ids(key_input, name_input):
+    try:
+        """Retrieves all recipe IDs from API based on recipe name provided by AI or string for testing"""
+        url = 'https://api.spoonacular.com/recipes/complexSearch?'
+        query = {'titleMatch': name_input, 'apiKey': key_input}
+
+        data = requests.get(url, params=query, timeout=10).json()
+        return data
+    except requests.exceptions.Timeout:
+        print("Error: The API request timed out.")
+        return None
+    except requests.exceptions.ConnectionError:
+        print("Error: Could not connect to the API. Check network connection or URL.")
+        return None
+    except requests.exceptions.HTTPError as e:
+        print(f"Error: HTTP error occurred: {e}")
+        return None
+    except requests.exceptions.RequestException as e:
+        # Catch any other requests-related exceptions not specifically handled
+        print(f"Error: An unexpected requests error occurred: {e}")
+        return None
+    except ValueError:
+        # Catches errors if the response content is not valid JSON
+        print("Error: API response is not valid JSON.")
+        return None
+    except Exception as e:
+        # Catch any other unexpected exceptions
+        print(f"Error: An unhandled exception occurred: {e}")
+        return None
