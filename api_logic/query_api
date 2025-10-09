@@ -60,17 +60,39 @@ def retrieve_recipes(key_input, id_input):
     This will need to change to alter output to JSON or objects
     :param key_input: environment variable, called from retrieve_key()
     :param id_input: list of id's returned from append_recipe_id"""   
-        #Clears the txt file for new text
+    #Clears the txt file for new text
     file_name = 'recipes_output.txt'
     open(file_name, 'w').close()
 
-    #each id in list is queried against API and json is appended to txt for output
-    for id in id_input:
-        url = f'https://api.spoonacular.com/recipes/{id}/information?'
-        query = {'includeNutrition': 'false', 'addWinePairing': 'false', 'addTastedata': 'false', 
-                'apiKey': key_input}
+    try:
+        #each id in list is queried against API and json is appended to txt for output
+        for id in id_input:
+            url = f'https://api.spoonacular.com/recipes/{id}/information?'
+            query = {'includeNutrition': 'false', 'addWinePairing': 'false', 'addTastedata': 'false', 
+                    'apiKey': key_input}
 
-        data = requests.get(url, params=query).json()
-        #writes json data to txt as it is too long to view in terminal
-        with open(file_name, 'a') as file:
-            json.dump(data, file, indent=4)
+            data = requests.get(url, params=query).json()
+            #writes json data to txt as it is too long to view in terminal
+            with open(file_name, 'a') as file:
+                json.dump(data, file, indent=4)
+    except requests.exceptions.Timeout:
+        print("Error: The API request timed out.")
+        return None
+    except requests.exceptions.ConnectionError:
+        print("Error: Could not connect to the API. Check network connection or URL.")
+        return None
+    except requests.exceptions.HTTPError as e:
+        print(f"Error: HTTP error occurred: {e}")
+        return None
+    except requests.exceptions.RequestException as e:
+        # Catch any other requests-related exceptions not specifically handled
+        print(f"Error: An unexpected requests error occurred: {e}")
+        return None
+    except ValueError:
+        # Catches errors if the response content is not valid JSON
+        print("Error: API response is not valid JSON.")
+        return None
+    except Exception as e:
+        # Catch any other unexpected exceptions
+        print(f"Error: An unhandled exception occurred: {e}")
+        return None
