@@ -6,9 +6,12 @@ def retrieve_key():
     key = os.environ.get('SPOONACULAR_KEY')
     return key
 
-def retrieve_recipe_ids(key_input, name_input):
+def query_api_ids(key_input, name_input):
+    """Retrieves data from API based on user input string
+    :param key_input: environment variable, called from retrieve_key()
+    :param name_input: input of recipe name that will be queried by the API
+    :returns: the full json query for the titleMatch call to API"""
     try:
-        """Retrieves all recipe IDs from API based on recipe name provided by AI or string for testing"""
         url = 'https://api.spoonacular.com/recipes/complexSearch?'
         query = {'titleMatch': name_input, 'apiKey': key_input}
 
@@ -35,3 +38,18 @@ def retrieve_recipe_ids(key_input, name_input):
         # Catch any other unexpected exceptions
         print(f"Error: An unhandled exception occurred: {e}")
         return None
+    
+def append_recipe_id(api_data_input):
+        """Takes an individual recipe id from API return and appends it to a list to later use to
+        query Get Recipe Information
+        :param api_data_input: Full dictionary of JSON data retrieved from API using titleMatch call
+        :returns: List of recipe ID to call Get Recipe Information"""
+        recipe_results = api_data_input['results']
+
+        all_recipe_id = []
+
+        #each id is retrieved from dictionary and appended to list then returned
+        for id in recipe_results:
+            recipe_id = id['id']
+            all_recipe_id.append(recipe_id)
+            return all_recipe_id
