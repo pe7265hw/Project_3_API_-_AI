@@ -53,7 +53,7 @@ def append_recipe_id(api_data_input):
         for id in recipe_results:
             recipe_id = id['id']
             all_recipe_id.append(recipe_id)
-            return all_recipe_id
+        return all_recipe_id
         
 def retrieve_recipes(key_input, id_input):
     """Retrieves the recipes based on list of id and formatted for workable output
@@ -61,8 +61,8 @@ def retrieve_recipes(key_input, id_input):
     :param key_input: environment variable, called from retrieve_key()
     :param id_input: list of id's returned from append_recipe_id"""   
     #Clears the txt file for new text
-    file_name = 'recipes_output.txt'
-    open(file_name, 'w').close()
+    # file_name = 'recipes_output.txt'
+    # open(file_name, 'w').close()
 
     try:
         #each id in list is queried against API and json is appended to txt for output
@@ -72,9 +72,12 @@ def retrieve_recipes(key_input, id_input):
                     'apiKey': key_input}
 
             data = requests.get(url, params=query).json()
-            #writes json data to txt as it is too long to view in terminal
-            with open(file_name, 'a') as file:
-                json.dump(data, file, indent=4)
+
+            parse_recipe_info(data)
+
+            # #writes json data to txt as it is too long to view in terminal
+            # with open(file_name, 'a') as file:
+            #     json.dump(data, file, indent=4)
     except requests.exceptions.Timeout:
         print("Error: The API request timed out.")
         return None
@@ -96,3 +99,15 @@ def retrieve_recipes(key_input, id_input):
         # Catch any other unexpected exceptions
         print(f"Error: An unhandled exception occurred: {e}")
         return None
+    
+def parse_recipe_info(recipe_request_input):
+    recipe_name = recipe_request_input['title']
+    cooking_time = recipe_request_input['readyInMinutes']
+    serving_amount = recipe_request_input['servings']
+    recipe_credit = recipe_request_input['creditsText']
+    recipe_url = recipe_request_input['sourceUrl'] 
+
+    recipe_info = [recipe_name, cooking_time, serving_amount, recipe_credit, recipe_url]
+
+    for i in range(len(recipe_request_input['extendedIngredients'])):
+        recipe_ingredients = {}
