@@ -7,6 +7,8 @@ def retrieve_key():
     key = os.environ.get('SPOONACULAR_KEY')
     return key
 
+
+
 def query_api_ids(key_input, name_input):
     """Retrieves data from API based on user input string
     :param key_input: environment variable, called from retrieve_key()
@@ -30,10 +32,6 @@ def query_api_ids(key_input, name_input):
     except requests.exceptions.RequestException as e:
         # Catch any other requests-related exceptions not specifically handled
         print(f"Error: An unexpected requests error occurred: {e}")
-        return None
-    except ValueError:
-        # Catches errors if the response content is not valid JSON
-        print("Error: API response is not valid JSON.")
         return None
     except Exception as e:
         # Catch any other unexpected exceptions
@@ -91,23 +89,25 @@ def retrieve_recipes(key_input, id_input):
         # Catch any other requests-related exceptions not specifically handled
         print(f"Error: An unexpected requests error occurred: {e}")
         return None
-    except ValueError:
-        # Catches errors if the response content is not valid JSON
-        print("Error: API response is not valid JSON.")
-        return None
     except Exception as e:
         # Catch any other unexpected exceptions
         print(f"Error: An unhandled exception occurred: {e}")
         return None
     
 def parse_recipe_info(recipe_request_input):
+    recipe_information = {}
+    
     recipe_name = recipe_request_input['title']
     cooking_time = recipe_request_input['readyInMinutes']
     serving_amount = recipe_request_input['servings']
     recipe_credit = recipe_request_input['creditsText']
     recipe_url = recipe_request_input['sourceUrl'] 
 
-    recipe_info = [recipe_name, cooking_time, serving_amount, recipe_credit, recipe_url]
+    recipe_stats = [recipe_name, cooking_time, serving_amount, recipe_credit, recipe_url]
+
+    
 
     for i in range(len(recipe_request_input['extendedIngredients'])):
-        recipe_ingredients = {}
+        recipe_information[i] = recipe_request_input['extendedIngredients'][i]['original']
+        
+    
