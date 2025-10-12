@@ -110,4 +110,12 @@ def parse_recipe_info(recipe_request_input):
     for i in range(len(recipe_request_input['extendedIngredients'])):
         recipe_information[i] = recipe_request_input['extendedIngredients'][i]['original']
         
-    
+    recipe_instructions = recipe_request_input['instructions']
+
+    recipe_information_length = len(recipe_information)
+
+    recipe_information[recipe_information_length] = recipe_stats
+
+    recipe_information[recipe_information_length + 1] = recipe_instructions
+
+    return recipe_information
