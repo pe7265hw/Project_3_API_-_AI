@@ -39,8 +39,8 @@ def query_api_ids(key_input, name_input):
         return None
     
 def append_recipe_id(api_data_input, recipe_name_input):
-        """Takes an individual recipe id from API return and appends it to a list to later use to
-        query Get Recipe Information
+        """Performs a regex search to ensure title is in recipe name then if so appends recipe id
+        to a list to be used by retrieve_recipes
         :param api_data_input: Full dictionary of JSON data retrieved from API using titleMatch call
         :returns: List of recipe ID to call Get Recipe Information"""
         recipe_results = api_data_input['results']
