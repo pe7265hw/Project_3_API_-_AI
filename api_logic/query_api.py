@@ -1,12 +1,12 @@
 import requests
 import os
 import json
+import re
 
 def retrieve_key():
     """Retrieves API key"""
     key = os.environ.get('SPOONACULAR_KEY')
     return key
-
 
 
 def query_api_ids(key_input, name_input):
@@ -19,7 +19,7 @@ def query_api_ids(key_input, name_input):
         query = {'titleMatch': name_input, 'apiKey': key_input}
 
         data = requests.get(url, params=query, timeout=10).json()
-        return data
+        return data, name_input
     except requests.exceptions.Timeout:
         print("Error: The API request timed out.")
         return None
@@ -38,7 +38,7 @@ def query_api_ids(key_input, name_input):
         print(f"Error: An unhandled exception occurred: {e}")
         return None
     
-def append_recipe_id(api_data_input):
+def append_recipe_id(api_data_input, recipe_name_input):
         """Takes an individual recipe id from API return and appends it to a list to later use to
         query Get Recipe Information
         :param api_data_input: Full dictionary of JSON data retrieved from API using titleMatch call
@@ -48,9 +48,14 @@ def append_recipe_id(api_data_input):
         all_recipe_id = []
 
         #each id is retrieved from dictionary and appended to list then returned
-        for id in recipe_results:
-            recipe_id = id['id']
-            all_recipe_id.append(recipe_id)
+        for item in recipe_results:
+            text = item['title']
+            pattern = recipe_name_input
+            match_object = re.search(pattern, text)
+
+            if match_object:
+                recipe_id = item['id']
+                all_recipe_id.append(recipe_id)
         return all_recipe_id
         
 def retrieve_recipes(key_input, id_input):
@@ -59,8 +64,8 @@ def retrieve_recipes(key_input, id_input):
     :param key_input: environment variable, called from retrieve_key()
     :param id_input: list of id's returned from append_recipe_id"""   
     #Clears the txt file for new text
-    # file_name = 'recipes_output.txt'
-    # open(file_name, 'w').close()
+    file_name = 'recipes_output.txt'
+    open(file_name, 'w').close()
 
     try:
         #each id in list is queried against API and json is appended to txt for output
@@ -71,11 +76,11 @@ def retrieve_recipes(key_input, id_input):
 
             data = requests.get(url, params=query).json()
 
-            parse_recipe_info(data)
+            #parse_recipe_info(data)
 
             # #writes json data to txt as it is too long to view in terminal
-            # with open(file_name, 'a') as file:
-            #     json.dump(data, file, indent=4)
+            with open(file_name, 'a') as file:
+                json.dump(data, file, indent=4)
     except requests.exceptions.Timeout:
         print("Error: The API request timed out.")
         return None
