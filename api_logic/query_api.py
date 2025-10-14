@@ -94,28 +94,3 @@ def retrieve_recipes(key_input, id_input):
         print(f"Error: An unhandled exception occurred: {e}")
         return None
     
-def parse_recipe_info(recipe_request_input):
-    recipe_information = {}
-    
-    recipe_name = recipe_request_input['title']
-    cooking_time = recipe_request_input['readyInMinutes']
-    serving_amount = recipe_request_input['servings']
-    recipe_credit = recipe_request_input['creditsText']
-    recipe_url = recipe_request_input['sourceUrl'] 
-
-    recipe_stats = [recipe_name, cooking_time, serving_amount, recipe_credit, recipe_url]
-
-    
-
-    for i in range(len(recipe_request_input['extendedIngredients'])):
-        recipe_information[i] = recipe_request_input['extendedIngredients'][i]['original']
-        
-    recipe_instructions = recipe_request_input['instructions']
-
-    recipe_information_length = len(recipe_information)
-
-    recipe_information[recipe_information_length] = recipe_stats
-
-    recipe_information[recipe_information_length + 1] = recipe_instructions
-
-    return recipe_information
