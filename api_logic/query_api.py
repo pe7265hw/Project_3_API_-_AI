@@ -2,13 +2,26 @@ import requests
 import os
 import json
 import re
-from rapidfuzz import fuzz
 
 def retrieve_key():
-    """Retrieves API key"""
-    key = os.environ.get('SPOONACULAR_KEY')
-    return key
+        key = os.environ.get('SPOONACULAR_KEY')
+        return key
 
+#Before append_recipe_id can work with the results there will need to be validation of what was returned
+#check_for_entries can validate whether something is returned but if it is nothing then we need to decide what to return the user
+#Do we still return results if 2/3 are hits? 1/3? Or do we want 3/3 in order to return results?
+#Do we ask the user to provide another country/location etc or do we ask the AI for different recipes?
+
+
+def check_for_entries(api_data_input):
+    """Validation for input that does not return a result"""
+    recipe_results = api_data_input['results']
+    if recipe_results == []:
+        return True
+    else:
+        return False
+       
+            
 
 def query_api_ids(key_input, name_input):
     """Retrieves data from API based on user input string
@@ -38,7 +51,8 @@ def query_api_ids(key_input, name_input):
         # Catch any other unexpected exceptions
         print(f"Error: An unhandled exception occurred: {e}")
         return None
-    
+
+
 def append_recipe_id(api_data_input, recipe_name_input):
         """Performs a regex search to ensure title is in recipe name then if so appends recipe id
         to a list to be used by retrieve_recipes
@@ -46,24 +60,17 @@ def append_recipe_id(api_data_input, recipe_name_input):
         :returns: List of recipe ID to call Get Recipe Information"""
         recipe_results = api_data_input['results']
 
-        all_recipe_id = []
-
-        
+        all_recipe_id = []           
         for item in recipe_results:
             text = item['title']
-            #pattern = recipe_name_input
 
             #regex is used to see if desired title appears in the recipe name, if yes ID appended to list
             match_object = re.search(recipe_name_input.lower(), text.lower())
 
             #if regex finds match rapid fuzz checks for a partial match to further pair down results
             if match_object:
-                threshold = 80
-                score = fuzz.partial_ratio(recipe_name_input.lower(), text.lower())
-                #both pass then id appended to list
-                if score >= threshold:
-                    recipe_id = item['id']
-                    all_recipe_id.append(recipe_id)
+                recipe_id = item['id']
+                all_recipe_id.append(recipe_id)
         return all_recipe_id
         
 def retrieve_recipes(key_input, id_input):
