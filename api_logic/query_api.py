@@ -48,15 +48,22 @@ def append_recipe_id(api_data_input, recipe_name_input):
 
         all_recipe_id = []
 
-        #regex is used to see if desired title appears in the recipe name, if yes ID appended to list
+        
         for item in recipe_results:
             text = item['title']
-            pattern = recipe_name_input
-            match_object = re.search(pattern, text)
+            #pattern = recipe_name_input
 
+            #regex is used to see if desired title appears in the recipe name, if yes ID appended to list
+            match_object = re.search(recipe_name_input.lower(), text.lower())
+
+            #if regex finds match rapid fuzz checks for a partial match to further pair down results
             if match_object:
-                recipe_id = item['id']
-                all_recipe_id.append(recipe_id)
+                threshold = 80
+                score = fuzz.partial_ratio(recipe_name_input.lower(), text.lower())
+                #both pass then id appended to list
+                if score >= threshold:
+                    recipe_id = item['id']
+                    all_recipe_id.append(recipe_id)
         return all_recipe_id
         
 def retrieve_recipes(key_input, id_input):
