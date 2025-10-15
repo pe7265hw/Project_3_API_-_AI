@@ -2,6 +2,7 @@ import requests
 import os
 import json
 import re
+from rapidfuzz import fuzz
 
 def retrieve_key():
     """Retrieves API key"""
@@ -47,7 +48,7 @@ def append_recipe_id(api_data_input, recipe_name_input):
 
         all_recipe_id = []
 
-        #each id is retrieved from dictionary and appended to list then returned
+        #regex is used to see if desired title appears in the recipe name, if yes ID appended to list
         for item in recipe_results:
             text = item['title']
             pattern = recipe_name_input
