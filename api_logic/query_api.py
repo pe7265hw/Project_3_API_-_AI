@@ -33,7 +33,9 @@ def query_api_ids(key_input, name_input):
         query = {'titleMatch': name_input, 'apiKey': key_input}
 
         data = requests.get(url, params=query, timeout=10).json()
-        return data, name_input
+        recipe_results = data['results']
+        return recipe_results, name_input
+    
     except requests.exceptions.Timeout:
         print("Error: The API request timed out.")
         return None
@@ -58,10 +60,9 @@ def append_recipe_id(api_data_input, recipe_name_input):
         to a list to be used by retrieve_recipes
         :param api_data_input: Full dictionary of JSON data retrieved from API using titleMatch call
         :returns: List of recipe ID to call Get Recipe Information"""
-        recipe_results = api_data_input['results']
 
         all_recipe_id = []           
-        for item in recipe_results:
+        for item in api_data_input:
             text = item['title']
 
             #regex is used to see if desired title appears in the recipe name, if yes ID appended to list
