@@ -23,7 +23,7 @@ def check_for_entries(api_data_input):
        
             
 
-def query_api_ids(key_input, name_input):
+def query_api(key_input, name_input):
     """Retrieves data from API based on user input string
     :param key_input: environment variable, called from retrieve_key()
     :param name_input: input of recipe name that will be queried by the API
@@ -55,7 +55,7 @@ def query_api_ids(key_input, name_input):
         return None
 
 
-def append_recipe_id(api_data_input, recipe_name_input):
+def parse_api_return(api_data_input, recipe_name_input):
         """Performs a regex search to ensure title is in recipe name then if so appends recipe id
         to a list to be used by retrieve_recipes
         :param api_data_input: Full dictionary of JSON data retrieved from API using titleMatch call
