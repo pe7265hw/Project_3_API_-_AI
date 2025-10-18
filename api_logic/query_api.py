@@ -56,23 +56,39 @@ def query_api(key_input, name_input):
 
 
 def parse_api_return(api_data_input, recipe_name_input):
-        """Performs a regex search to ensure title is in recipe name then if so appends recipe id
+        """Performs a regex search to ensure title is in recipe name then if so searches for middle length
+         recipe name and returns that id
         to a list to be used by retrieve_recipes
         :param api_data_input: Full dictionary of JSON data retrieved from API using titleMatch call
         :returns: List of recipe ID to call Get Recipe Information"""
 
-        all_recipe_id = []           
+
+        recipe_parse_information = {}
+
         for item in api_data_input:
             text = item['title']
 
             #regex is used to see if desired title appears in the recipe name, if yes ID appended to list
             match_object = re.search(recipe_name_input.lower(), text.lower())
 
-            #if regex finds match rapid fuzz checks for a partial match to further pair down results
+            #if regex finds match...
             if match_object:
-                recipe_id = item['id']
-                all_recipe_id.append(recipe_id)
-        return all_recipe_id
+                recipe_parse_information[item[id]] = len(text)
+
+        name_length = list(recipe_parse_information.values())
+        name_length.sort()
+
+        if len(name_length) % 2 != 0:
+            mid_index = len(name_length) // 2
+            mid_name_length = name_length[mid_index]
+
+            return mid_name_length
+        
+        else:
+            mid_index = len(name_length) // 2 - 1
+            mid_name_length = name_length[mid_index]
+
+            return mid_name_length
         
 def retrieve_recipes(key_input, id_input):
     """Retrieves the recipes based on list of id and formatted for workable output
