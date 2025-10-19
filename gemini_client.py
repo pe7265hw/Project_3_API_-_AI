@@ -13,25 +13,34 @@ Follow these steps precisely:
     needs if any were specified in step 2.
 """
 
-# Create a Pydantic model to give the AI response a structured format
-# This makes the AI response more predictable and easier to parse
+# Pydantic model for structured recipe output
+# This model defines the expected structure of the recipe data returned by the AI.
 class Recipe(BaseModel):
     name: str
     dietary_restrictions: list[str] 
 
 def gemini_recipe_chat():
-    """Creates a chat with Gemini and handles user interaction for recipe suggestions."""
+    """This does not create a actual chat, instead it uses 2 separate send_message calls with different configurations 
+    to allow for the response schema to be applied only on the 2nd turn."""
     
-    # Initialize the Gemini client and create a chat session with the system prompt
-    client = genai.Client()
-    chat = client.chats.create(
-        model='gemini-2.5-flash',
-        config=GenerateContentConfig(
+    # Configuration for the first response (no schema) just text response
+    default_config = GenerateContentConfig(
+            system_instruction=system_prompt
+    )
+
+    # Response schema configuration to be used on the for the second response 
+    schema_config = GenerateContentConfig(
             system_instruction=system_prompt,
             response_mime_type='application/json',
             response_schema=Recipe
         )
-    )
+    
+    if is_first_interaction:
+        config = default_config
+    else:
+        config = schema_config
+
+    
 
     print('Hello! I\'m your recipe assistant. Give me a country or region and I will give you some popular recipes from that area.')
 
