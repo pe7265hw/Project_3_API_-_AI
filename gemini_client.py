@@ -1,5 +1,5 @@
 from google import genai
-from google.genai.types import GenerateContentConfig
+from google.genai.types import GenerateContentConfig, Content, Part
 from pydantic import BaseModel
 
 system_prompt = """
@@ -49,6 +49,9 @@ def gemini_recipe_chat():
     This is how we switch between the 2 configurations defined above."""
     is_first_interaction = True
 
+    # Initialize conversation history, This a list of Gemini Content objects
+    history = []
+
     # Main interaction loop
     while True:
 
@@ -61,25 +64,34 @@ def gemini_recipe_chat():
         # Get user input and generate response
         if is_first_interaction:
             prompt = input('> ')
+            user_message = Content(role='user', parts=[Part(text=prompt)])
+            history.append(user_message)
             response = client.models.generate_content(
                 model=model,
-                contents=prompt,
+                contents=history,
                 config=config
             )
+            gemini_reply = response.candidates[0].content
+            history.append(gemini_reply)
             # Print the raw text response for the first interaction
             print(response.text)
             is_first_interaction = False # Switch to second interaction 
-            continue
+            continue 
         try:
             prompt = input('> ')
+            user_message = Content(role='user', parts=[Part(text=prompt)])
+            history.append(user_message)
             response = client.models.generate_content(
                 model=model,
-                contents=prompt,
+                contents=history,
                 config=config
             )
             print(response.parsed)
-            
+            break  # Exit after the second interaction
         except Exception as e:
             print("Sorry, I couldn't understand the response. Please try again.")
+    
+    return response.parsed
+
         
 gemini_recipe_chat()
