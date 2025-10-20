@@ -16,13 +16,15 @@ Follow these steps precisely:
 # Pydantic model for structured recipe output
 # This model defines the expected structure of the recipe data returned by the AI.
 class Recipe(BaseModel):
-    name: str
+    name: list[str]
     dietary_restrictions: list[str] 
 
 def gemini_recipe_chat():
     """This does not create a actual chat, instead it uses 2 separate send_message calls with different configurations 
     to allow for the response schema to be applied only on the 2nd turn."""
     
+    client = genai.Client()
+    model = "gemini-2.5-flash"
     # Configuration for the first response (no schema) just text response
     default_config = GenerateContentConfig(
             system_instruction=system_prompt
@@ -34,13 +36,6 @@ def gemini_recipe_chat():
             response_mime_type='application/json',
             response_schema=Recipe
         )
-    
-    if is_first_interaction:
-        config = default_config
-    else:
-        config = schema_config
-
-    
 
     print('Hello! I\'m your recipe assistant. Give me a country or region and I will give you some popular recipes from that area.')
 
@@ -49,16 +44,29 @@ def gemini_recipe_chat():
     while True:
 
         if is_first_interaction:
+            config = default_config
+        else:
+            config = schema_config
+
+        if is_first_interaction:
             prompt = input('> ')
-            response = chat.send_message(prompt)
+            response = client.models.generate_content(
+                model=model,
+                contents=prompt,
+                config=config
+            )
             print(response.text)
             is_first_interaction = False
-            # Parse the AI response into the Recipe model
+            continue
         try:
             prompt = input('> ')
-            response = chat.send_message(prompt)
-            recipe = response.parsed
-            print(recipe)
+            response = client.models.generate_content(
+                model=model,
+                contents=prompt,
+                config=config
+            )
+            print(response.parsed)
+            
         except Exception as e:
             print("Sorry, I couldn't understand the response. Please try again.")
         
