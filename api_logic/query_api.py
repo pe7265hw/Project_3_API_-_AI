@@ -75,23 +75,12 @@ def parse_api_return(api_data_input, recipe_name_input):
             if match_object:
                 recipe_parse_information[item['id']] = len(text)
 
-        name_length = list(recipe_parse_information.values())
-        name_length.sort()
+        #the id attributed to the shortest recipe name is selected, this is done because re.search only selects
+        #recipes that match the exact input string, so the shortest match is closest to the exact search string
+        #first instance of match is taken in the event two recipe names are the same length
+        shortest_recipe_id = min(recipe_parse_information, key=recipe_parse_information.get)
 
-        
-
-        # if len(name_length) % 2 != 0:
-        #     mid_index = len(name_length) // 2
-        #     mid_name_length = name_length[mid_index]
-
-
-        #     return mid_name_length
-        
-        # else:
-        #     mid_index = len(name_length) // 2 - 1
-        #     mid_name_length = name_length[mid_index]
-
-        #     return mid_name_length
+        return shortest_recipe_id
         
 def retrieve_recipes(key_input, id_input):
     """Retrieves the recipes based on list of id and formatted for workable output
