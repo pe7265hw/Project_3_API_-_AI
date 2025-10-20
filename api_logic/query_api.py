@@ -71,7 +71,7 @@ def parse_api_return(api_data_input, recipe_name_input):
             #regex is used to see if desired title appears in the recipe name, if yes ID appended to list
             match_object = re.search(recipe_name_input.lower(), text.lower())
 
-            #if regex finds match...
+            #if regex finds match, dictionary entry of id and length of name added to dictionary
             if match_object:
                 recipe_parse_information[item['id']] = len(text)
 
@@ -86,25 +86,26 @@ def retrieve_recipes(key_input, id_input):
     """Retrieves the recipes based on list of id and formatted for workable output
     This will need to change to alter output to JSON or objects
     :param key_input: environment variable, called from retrieve_key()
-    :param id_input: list of id's returned from append_recipe_id"""   
+    :param id_input: id returned from parse_api_return"""   
+    
     #Clears the txt file for new text
     file_name = 'recipes_output.txt'
     open(file_name, 'w').close()
 
     try:
-        #each id in list is queried against API and json is appended to txt for output
-        for id in id_input:
-            url = f'https://api.spoonacular.com/recipes/{id}/information?'
-            query = {'includeNutrition': 'false', 'addWinePairing': 'false', 'addTastedata': 'false', 
+
+        url = f'https://api.spoonacular.com/recipes/{id_input}/information?'
+        query = {'includeNutrition': 'false', 'addWinePairing': 'false', 'addTastedata': 'false', 
                     'apiKey': key_input}
+            
+        data = requests.get(url, params=query).json()
 
-            data = requests.get(url, params=query).json()
+         #parse_recipe_info(data)
 
-            #parse_recipe_info(data)
+        # #writes json data to txt as it is too long to view in terminal
+        with open(file_name, 'a') as file:
+            json.dump(data, file, indent=4)
 
-            # #writes json data to txt as it is too long to view in terminal
-            with open(file_name, 'a') as file:
-                json.dump(data, file, indent=4)
     except requests.exceptions.Timeout:
         print("Error: The API request timed out.")
         return None
