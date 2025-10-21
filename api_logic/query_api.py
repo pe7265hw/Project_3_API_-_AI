@@ -143,7 +143,8 @@ def extract_recipe_information(recipe_request_input):
         recipe_information[i] = [ingredients[i]['name'], ingredients[i]['amount'],
                                  ingredients[i]['unit']]
 
-    #Pulls information from requests section of dictionary    
+    #Pulls information from requests section of dictionary
+    # eventually trim <ol><li> here!!!!!!!    
     recipe_instructions = recipe_request_input['instructions']
 
     recipe_information_length = len(recipe_information)
@@ -155,3 +156,14 @@ def extract_recipe_information(recipe_request_input):
     recipe_information[recipe_information_length + 1] = recipe_instructions
 
     return recipe_information
+
+    """Recipe information data structure:
+    {
+      0: ['flour', '2.0', 'cups'],
+      1: ['milk', '3', 'cups'],
+      2: ['butter', '2.5', 'tabelspoons']}
+      3: {'recipe name': 'toretellini', 'cooking_time_minutes': 120, serving_amount: 8,
+            'recipe_credit': 'Foodista', 'url': 'www.foodista.com'}
+      4:"First do this then do that, blah blah blah"
+    }
+      """
