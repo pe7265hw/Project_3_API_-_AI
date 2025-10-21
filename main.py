@@ -6,7 +6,9 @@ def main():
     key = api.retrieve_key()
     recipe_all, recipe_name = api.query_api(key, 'tortellini')
     chosen_id = api.parse_api_return(recipe_all, recipe_name)
-    api.retrieve_recipes(key, chosen_id)
+    recipe_information = api.retrieve_recipe(key, chosen_id)
+    api.extract_recipe_information(recipe_information)
+
 
 
 if __name__ == '__main__':

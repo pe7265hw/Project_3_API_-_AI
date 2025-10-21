@@ -82,7 +82,7 @@ def parse_api_return(api_data_input, recipe_name_input):
 
         return shortest_recipe_id
         
-def retrieve_recipes(key_input, id_input):
+def retrieve_recipe(key_input, id_input):
     """Retrieves the recipes based on list of id and formatted for workable output
     This will need to change to alter output to JSON or objects
     :param key_input: environment variable, called from retrieve_key()
@@ -124,7 +124,7 @@ def retrieve_recipes(key_input, id_input):
         print(f"Error: An unhandled exception occurred: {e}")
         return None
 
-def final_recipe_information(recipe_request_input):
+def extract_recipe_information(recipe_request_input):
     recipe_information = {}
     
     recipe_name = recipe_request_input['title']
