@@ -123,4 +123,5 @@ def retrieve_recipes(key_input, id_input):
         # Catch any other unexpected exceptions
         print(f"Error: An unhandled exception occurred: {e}")
         return None
-    
+
+#test to make sure pychache statys on .gitignore
