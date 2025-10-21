@@ -142,3 +142,16 @@ def final_recipe_information(recipe_request_input):
     for i in range(len(ingredients)):
         recipe_information[i] = [ingredients[i]['name'], ingredients[i]['amount'],
                                  ingredients[i]['units']]
+
+    #Pulls information from requests section of dictionary    
+    recipe_instructions = recipe_request_input['instructions']
+
+    recipe_information_length = len(recipe_information)
+
+    #adds recipe information to dictionary after ingredients
+    recipe_information[recipe_information_length] = recipe_stats
+
+    #adds instructions after recipe information
+    recipe_information[recipe_information_length + 1] = recipe_instructions
+
+    return recipe_information
