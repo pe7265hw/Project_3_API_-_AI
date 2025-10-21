@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Recipes for {{ cuisine }}</title>
+</head>
+<body>
+    <h1>Recipes for {{ cuisine }} ({{ diet }})</h1>
+
+    {% if recipes %}
+        <ul>
+            {% for recipe in recipes %}
+                <li>
+                    <h3>{{ recipe.title }}</h3>
+                    <img src="{{ recipe.image }}" alt="{{ recipe.title }}" width="200">
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No recipes found.</p>
+    {% endif %}
+</body>
+</html>

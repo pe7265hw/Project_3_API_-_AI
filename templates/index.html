@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub API App</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <h1>Recipe Recommendations App</h1>
+ 
+    <form action="/get_recipes" method="get">
+        <label for="cuisine">Select Cuisine / Region:</label>
+        <select name="cuisine" id="cuisine" required>
+            <option value="" disabled selected>Select cuisine</option>
+            <option value="Italian">Italian</option>
+            <option value="Japanese">Japanese</option>
+            <option value="Mexican">Mexican</option>
+            <option value="Indian">Indian</option>
+            <option value="Thai">Thai</option>
+            <option value="Mediterranean">Mediterranean</option>
+            <option value="French">French</option>
+            <option value="Chinese">Chinese</option>
+        </select>
+        <br><br>
+
+        <!-- Dietary Restriction Dropdown -->
+        <label for="diet">Select Dietary Restriction (optional):</label>
+        <select name="diet" id="diet">
+            <option value="" selected>None</option>
+            <option value="vegetarian">Vegetarian</option>
+            <option value="vegan">Vegan</option>
+            <option value="gluten-free">Gluten-Free</option>
+            <option value="Paleo">PALEO</option>
+            <option value="pescetarian">Pescetarian</option>
+            <option value="Primal">Primal</option>
+            <option value="halal">Halal</option>
+            
+        </select>
+        <br><br>
+
+        <button type="submit">Search Recipes</button>
+    </form>
+
+</body>
+</html>
