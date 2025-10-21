@@ -89,8 +89,8 @@ def retrieve_recipe(key_input, id_input):
     :param id_input: id returned from parse_api_return"""   
     
     #Clears the txt file for new text
-    file_name = 'recipes_output.txt'
-    open(file_name, 'w').close()
+    # file_name = 'recipes_output.txt'
+    # open(file_name, 'w').close()
 
     try:
 
@@ -100,11 +100,11 @@ def retrieve_recipe(key_input, id_input):
             
         data = requests.get(url, params=query).json()
 
-         #parse_recipe_info(data)
-
         # #writes json data to txt as it is too long to view in terminal
-        with open(file_name, 'a') as file:
-            json.dump(data, file, indent=4)
+        # with open(file_name, 'a') as file:
+        #     json.dump(data, file, indent=4)
+
+        return data
 
     except requests.exceptions.Timeout:
         print("Error: The API request timed out.")
@@ -141,7 +141,7 @@ def extract_recipe_information(recipe_request_input):
 
     for i in range(len(ingredients)):
         recipe_information[i] = [ingredients[i]['name'], ingredients[i]['amount'],
-                                 ingredients[i]['units']]
+                                 ingredients[i]['unit']]
 
     #Pulls information from requests section of dictionary    
     recipe_instructions = recipe_request_input['instructions']
