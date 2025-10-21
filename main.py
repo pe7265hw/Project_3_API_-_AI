@@ -4,7 +4,7 @@ from api_logic import query_api as api
 
 def main():
     key = api.retrieve_key()
-    recipe_missing_count = 0
+    empty_recipe_return = 0
 
     gemini_recipe_input = []
     flask_recipe_output = []
@@ -18,9 +18,12 @@ def main():
             flask_recipe_output.append(extracted_recipe_information)
 
         else:
-            recipe_return_count -= 1
+            recipe_return_count += 1
 
-    
+    if empty_recipe_return >= 2:
+        return
+    else:
+        return flask_recipe_output
 
 
 
