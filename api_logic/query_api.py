@@ -16,7 +16,7 @@ def retrieve_key():
 def check_for_entries(api_data_input):
     """Validation for input that does not return a result"""
     recipe_results = api_data_input['results']
-    if recipe_results == []:
+    if recipe_results != []:
         return True
     else:
         return False
@@ -98,7 +98,7 @@ def retrieve_recipe(key_input, id_input):
         query = {'includeNutrition': 'false', 'addWinePairing': 'false', 'addTastedata': 'false', 
                     'apiKey': key_input}
             
-        data = requests.get(url, params=query).json()
+        data = requests.get(url, params=query, timeout=10).json()
 
         # #writes json data to txt as it is too long to view in terminal
         # with open(file_name, 'a') as file:
