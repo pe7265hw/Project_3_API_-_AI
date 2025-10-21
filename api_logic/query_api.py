@@ -135,3 +135,10 @@ def final_recipe_information(recipe_request_input):
 
     recipe_stats = {'recipe_name': recipe_name, 'cooking_time_minutes': cooking_time, 'serving_amount': serving_amount,
                     'recipe_credit': recipe_credit, 'url': recipe_url}
+     
+    #shortened for ease of reference
+    ingredients = recipe_request_input['extendedIngredients']
+
+    for i in range(len(ingredients)):
+        recipe_information[i] = [ingredients[i]['name'], ingredients[i]['amount'],
+                                 ingredients[i]['units']]
