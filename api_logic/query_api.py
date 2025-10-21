@@ -157,7 +157,7 @@ def extract_recipe_information(recipe_request_input):
 
     return recipe_information
 
-    """Recipe information data structure:
+    """Recipe information example data structure:
     {
       0: ['flour', '2.0', 'cups'],
       1: ['milk', '3', 'cups'],
