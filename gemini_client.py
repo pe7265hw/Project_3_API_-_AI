@@ -16,6 +16,7 @@ Follow these steps precisely:
         "name": [list of 3 recipe names],
         "dietary_restrictions": [list of dietary restrictions or an empty list if none]
     }
+
 """
 
 # Pydantic model for structured recipe output
@@ -25,7 +26,7 @@ class Recipe(BaseModel):
     dietary_restrictions: list[str] 
 
 def gemini_recipe_chat():
-    """This does not create a actual chat, instead it uses 2 separate send_message calls with different configurations 
+    """This does not create an actual chat, instead it uses 2 separate GenerateContentConfig calls with different configurations 
     to allow for the response schema to be applied only on the 2nd turn."""
     
     client = genai.Client()
@@ -61,35 +62,47 @@ def gemini_recipe_chat():
         else:
             config = schema_config
 
-        # Get user input and generate response
+        # First interaction, returns raw text response
         if is_first_interaction:
             prompt = input('> ')
-            user_message = Content(role='user', parts=[Part(text=prompt)])
+
+            # Store the user message content and append to history
+            user_message = Content(role='user', parts=[Part(text=prompt)]) 
             history.append(user_message)
+
+            # Generate a response from Gemini
             response = client.models.generate_content(
                 model=model,
                 contents=history,
                 config=config
             )
-            gemini_reply = response.candidates[0].content
+
+            # Store Gemini's reply content 
+            gemini_reply = response.candidates[0].content 
             history.append(gemini_reply)
+        
+        if is_first_interaction:
             # Print the raw text response for the first interaction
             print(response.text)
-            is_first_interaction = False # Switch to second interaction 
-            continue 
-        try:
-            prompt = input('> ')
-            user_message = Content(role='user', parts=[Part(text=prompt)])
-            history.append(user_message)
-            response = client.models.generate_content(
-                model=model,
-                contents=history,
-                config=config
-            )
-            print(response.parsed)
-            break  # Exit after the second interaction
-        except Exception as e:
-            print("Sorry, I couldn't understand the response. Please try again.")
+
+            # Switch to second interaction
+            is_first_interaction = False  
+            
+        else:
+        # Second interaction, returns structured response
+            try:
+                prompt = input('> ')
+                user_message = Content(role='user', parts=[Part(text=prompt)])
+                history.append(user_message)
+                response = client.models.generate_content(
+                    model=model,
+                    contents=history,
+                    config=config
+                )
+                print(response.parsed)
+                break  # Exit after the second interaction
+            except Exception as e:
+                print("Sorry, I couldn't understand the response. Please try again.")
     
     return response.parsed
 
