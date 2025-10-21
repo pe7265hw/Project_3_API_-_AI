@@ -124,4 +124,14 @@ def retrieve_recipes(key_input, id_input):
         print(f"Error: An unhandled exception occurred: {e}")
         return None
 
-#test to make sure pychache statys on .gitignore
+def final_recipe_information(recipe_request_input):
+    recipe_information = {}
+    
+    recipe_name = recipe_request_input['title']
+    cooking_time = recipe_request_input['readyInMinutes']
+    serving_amount = recipe_request_input['servings']
+    recipe_credit = recipe_request_input['creditsText']
+    recipe_url = recipe_request_input['sourceUrl'] 
+
+    recipe_stats = {'recipe_name': recipe_name, 'cooking_time_minutes': cooking_time, 'serving_amount': serving_amount,
+                    'recipe_credit': recipe_credit, 'url': recipe_url}
