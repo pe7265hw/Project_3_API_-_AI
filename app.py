@@ -12,6 +12,7 @@ def homepage():
 def get_recipes():
     cuisine = request.args.get('cuisine')
     diet = request.args.get('diet')
+    recipe = request.args.get('recipe')
 
     if not cuisine:
         return ' Please enter  a cuisine or region.'
@@ -23,16 +24,19 @@ def get_recipes():
 
    
 
-    url = "https://api.spoonacular.com/recipes/complexSearch?titleMatch=cuisine&apiKey="
+    url = "https://api.spoonacular.com/recipes/complexSearch?"
 
 
-    params_search = {
-        'titleMatch': cuisine, 
-        'diet' :  diet,
-        'apiKey': api_key,
+    params_search = { 'apiKey':  api_key, 'number': 10}
+    if cuisine:
+        params_search['cuisine'] = cuisine
+    if diet:
+        params_search['diet'] = diet
+    if recipe:
+        params_search['query'] = recipe
+
+
         
-    }
-
     try:
         # Make the API request
         response = requests.get(url, params=params_search)
