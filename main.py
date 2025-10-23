@@ -7,6 +7,9 @@ def main():
     # empty_recipe_return = 0
 
     # gemini_recipe_input = []
+    # restrictions = []
+    # substitutions = []
+
     # flask_recipe_output = []
 
     # for item in gemini_recipe_input:

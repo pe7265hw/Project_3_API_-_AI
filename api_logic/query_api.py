@@ -126,6 +126,8 @@ def retrieve_recipe(key_input, id_input):
 
 def extract_recipe_information(recipe_request_input):
     recipe_information = {}
+
+    merge_dictionary = {}
     
     recipe_name = recipe_request_input['title']
     cooking_time = recipe_request_input['readyInMinutes']
@@ -149,7 +151,33 @@ def extract_recipe_information(recipe_request_input):
     ingredients = recipe_request_input['extendedIngredients']
 
     for i in range(len(ingredients)):
-        recipe_information[i] = [ingredients[i]['name'], ingredients[i]['amount'],
+        merge_dictionary[i]=[ingredients[i]['name'], ingredients[i]['amount'],
                                  ingredients[i]['unit']]
+        
+    recipe_information['ingredients'] = merge_dictionary
 
     return recipe_information
+
+
+"""
+Example of recipe_information return
+    recipe_information = {
+                          {'recipe_name': 'Tortellini In Brodo', 'cooking_time_minutes': 45,
+                           'serving_amount': 6, 'recipe_credit': 'Foodista.com – The Cooking 
+                           Encyclopedia Everyone Can Edit', 
+                           'url': 'https://www.foodista.com/recipe/RPG7M62J/tortellini-in-brodo'},
+
+                           {'instructions': '<ol><li>Heat the stock to a boil and 
+                           cook the tortellini. Ladle into bowls, squeeze in lemon 
+                           and stir. Grate cheese and zest on top, and add some 
+                           freshly ground salt and pepper. Serve immediately.
+                           </li></ol>'}
+                           
+                           {{'ingredients': 0: ['chicken stock', 2.0, 'cups'],
+                                            1: ['lemon juice', 1.0, 'teaspoon'], 
+                                            2: ['lemon zest', 1.0, 'teaspoon'], 
+                                            3: ['parmigiano-reggiano', 1.0, 'teaspoon'], 
+                                            4: ['salt and pepper', 6.0, 'servings'], 
+                                            5: ['tortellini', 0.75, 'cup']}}"""
+
+
