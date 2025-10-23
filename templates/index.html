@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Recommendations App</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <h1>Recipe Recommendations App</h1>
+ 
+    <form action="/get_recipes" method="get">
+
+       
+        <label for="cuisine">Enter Cuisine / Region:</label>
+        <input type="text" id="cuisine" name="cuisine" placeholder="e.g., Italian, Mexican, Thai" required>
+        <br><br>
+
+       
+        <label for="diet">Enter Dietary Restriction (optional):</label>
+        <input type="text" id="diet" name="diet" placeholder="e.g., vegan, gluten-free, halal">
+        <br><br>
+
+       
+        <label for="recipe">Enter Recipe or Ingredient:</label>
+        <input type="text" id="recipe" name="recipe" placeholder="e.g., pasta, curry, salad" required>
+        <br><br>
+
+        <button type="submit">Search Recipes</button>
+    </form>
+
+</body>
+</html>
