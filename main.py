@@ -30,7 +30,7 @@ def main():
 
 
     key = api.retrieve_key()
-    recipe_all, recipe_name = api.query_api(key, 'tortellini')
+    recipe_all, recipe_name = api.query_api(key, 'steak')
     chosen_id = api.parse_api_return(recipe_all, recipe_name)
     recipe_information = api.retrieve_recipe(key, chosen_id)
     extracted_recipe_information = api.extract_recipe_information(recipe_information)

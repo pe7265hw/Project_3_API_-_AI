@@ -139,7 +139,6 @@ def extract_recipe_information(recipe_request_input):
                     'recipe_credit': recipe_credit, 'url': recipe_url}
     
     #Pulls information from requests section of dictionary
-    # eventually trim <ol><li> here!!!!!!!    
     recipe_instructions = recipe_request_input['instructions']
 
     #adds recipe stats first to dictionary
@@ -162,10 +161,10 @@ def extract_recipe_information(recipe_request_input):
 """
 Example of recipe_information return
     recipe_information = {
-                          {'recipe_name': 'Tortellini In Brodo', 'cooking_time_minutes': 45,
-                           'serving_amount': 6, 'recipe_credit': 'Foodista.com – The Cooking 
-                           Encyclopedia Everyone Can Edit', 
-                           'url': 'https://www.foodista.com/recipe/RPG7M62J/tortellini-in-brodo'},
+                          {recipe_stats: {'recipe_name': 'Tortellini In Brodo', 'cooking_time_minutes': 45,
+                                          'serving_amount': 6, 'recipe_credit': 'Foodista.com – The Cooking 
+                                           Encyclopedia Everyone Can Edit', 
+                                          'url': 'https://www.foodista.com/recipe/RPG7M62J/tortellini-in-brodo'}},
 
                            {'instructions': '<ol><li>Heat the stock to a boil and 
                            cook the tortellini. Ladle into bowls, squeeze in lemon 
