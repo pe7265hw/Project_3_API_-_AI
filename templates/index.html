@@ -10,15 +10,14 @@
 
     <div class="container">
         <h1>Recipe Recommendation Application</h1>
+        <label for="userInput">Enter your response:</label>
         <form id="aiResponse" action="/get_recipes" method="get">
-
-            <label for="userInput">Enter your response:</label>
-            <textarea id="userInput" rows="10" placeholder="Type your response here..."></textarea>
+            <textarea id="userInput" placeholder="Please type here..."></textarea>
             <br><br>
-            <button type="submit">Submit</button>
+            <button type="button">Enter Text</button>
         </form>
         <div id="aiResponse" class="response-area">
-            <h2>AI Response:</h2>
+            <h2>AI Text:</h2>
             <p id="responseText"></p>
         </div>
     </div>
