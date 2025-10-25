@@ -6,7 +6,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def homepage():
-    return render_template('index.html')
+    initial_text = 'Welcome! Please enter what type of cuisine, dish or recipe you are interested in.'
+    return render_template('index.html', ai_output=initial_text, user_input='')
 
 @app.route('/get_recipes')
 def get_recipes():
