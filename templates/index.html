@@ -12,13 +12,13 @@
         <h1>Recipe Recommendation Application</h1>
         <label for="userInput">Enter your response:</label>
         <form id="aiResponse" action="/get_recipes" method="get">
-            <textarea id="userInput" placeholder="Please type here..."></textarea>
+            <textarea id="userInput" name="UserInput" placeholder="Please type here..."></textarea>
             <br><br>
-            <button type="reset">Enter Text</button>
+            <button type="Submit">Enter Text</button>
         </form>
         <div id="aiResponse" class="response-area">
             <h2>AI Text:</h2>
-            <p id="responseText"></p>
+            <textarea id="responseText" name="responseText" placeholder="Reponse here..."></textarea>
         </div>
     </div>
 </body>

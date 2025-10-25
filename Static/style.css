@@ -26,3 +26,8 @@ form {
     width: 500px; 
     height: 200px; 
 }
+
+#responseText{
+    width: 500px; 
+    height: 300px; 
+}
