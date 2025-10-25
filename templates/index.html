@@ -14,18 +14,26 @@
     <form action="/get_recipes" method="get">
 
        
-        <label for="cuisine">Enter Cuisine / Region:</label>
-        <input type="text" id="cuisine" name="cuisine" placeholder="e.g., Italian, Mexican, Thai" required>
+        <label for="cuisine">Enter Cuisine / Region / Food Interest:</label>
+        <input type="text" id="cuisine" name="cuisine" placeholder="e.g. Curry, Italian, Chicken, " required>
         <br><br>
 
        
-        <label for="diet">Enter Dietary Restriction (optional):</label>
-        <input type="text" id="diet" name="diet" placeholder="e.g., vegan, gluten-free, halal">
+        <label for="cost">Select how expensive:</label>
+        <select id="cost" name="cost">
+            <option value="cheap">Cheap</option>
+            <option value="affordable">Affordable</option>
+            <option value="expensive">Expensive</option>
+        </select>
         <br><br>
 
        
-        <label for="recipe">Enter Recipe or Ingredient:</label>
-        <input type="text" id="recipe" name="recipe" placeholder="e.g., pasta, curry, salad" required>
+        <label for="recipe">Select Nutritional Level:</label>
+        <select id="nutrition" name="nutrition">
+            <option value="healthy">Healthy</option>
+            <option value="moderately_healty">Moderately Nutritous</option>
+            <option value="comfort_food">Comfort Food</option>
+        </select>
         <br><br>
 
         <button type="submit">Search Recipes</button>
