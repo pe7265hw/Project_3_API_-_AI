@@ -20,21 +20,21 @@ def get_recipes():
 
 
 
-    recipes = []
-    if 'results' in data_search and data_search['results']:
-        for recipe in data_search['results']:
-            recipe_info = {
-                'title': recipe['title'],
-                'images': recipe.get('image', ''),
-                'id': recipe['id']
-            }
-            recipes.append(recipe_info)
-    else:
-        return f'No recipes found for {cuisine} ({diet}). Try a different search.'
+    # recipes = []
+    # if 'results' in data_search and data_search['results']:
+    #     for recipe in data_search['results']:
+    #         recipe_info = {
+    #             'title': recipe['title'],
+    #             'images': recipe.get('image', ''),
+    #             'id': recipe['id']
+    #         }
+    #         recipes.append(recipe_info)
+    # else:
+    #     return f'No recipes found for {cuisine} ({diet}). Try a different search.'
 
    
 
-    return render_template('food.html', cuisine=cuisine, diet=diet, recipes=recipes)
+    # return render_template('food.html', cuisine=cuisine, diet=diet, recipes=recipes)
 
 
     
