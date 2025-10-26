@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request
 import requests  # NOT the same as requests 
 import os
-import gemini_client as client
+import gemini_client as g_client
+from api_logic import query_api as api
 
 app = Flask(__name__)
 
@@ -11,11 +12,11 @@ def homepage():
 
 @app.route('/get_recipes')
 def get_recipes():
-    cuisine = request.args.get('cuisine')
-    diet = request.args.get('diet')
-    recipe = request.args.get('recipe')
+    cuisine = request.args.get('recipe')
+    cost = request.args.get('diet')
+    nutrition = request.args.get('recipe')
 
-    
+    recipe_names = g_client.gemini_recipe_chat()
     
     
 
