@@ -1,6 +1,4 @@
 from flask import Flask, render_template, request
-import requests  # NOT the same as requests 
-import os
 import gemini_client as g_client
 from api_logic import query_api as api
 
@@ -15,9 +13,6 @@ def get_recipes():
     cuisine = request.args.get('recipe')
     cost = request.args.get('diet')
     nutrition = request.args.get('recipe')
-
-    if not cuisine:
-        return ' Please enter  a cuisine or region.'
 
     recipe_names = g_client.gemini_recipe_chat(cuisine, cost, nutrition)
 
