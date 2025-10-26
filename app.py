@@ -24,7 +24,7 @@ def get_recipes():
     key = api.retrieve_key()
 
 
-    flask_recipe_output = []
+    recipes = []
     
     for item in recipe_names:
         if api.check_for_entries(item) ==  True:
@@ -32,10 +32,10 @@ def get_recipes():
             chosen_id = api.parse_api_return(recipe_all, recipe_name)
             recipe_information = api.retrieve_recipe(key, chosen_id)
             extracted_recipe_information = api.extract_recipe_information(recipe_information)
-            flask_recipe_output.append(extracted_recipe_information)
+            recipes.append(extracted_recipe_information)
 
-    if flask_recipe_output:
-        return render_template('food.html', flask_recipe_output=flask_recipe_output)
+    if recipes:
+        return render_template('food.html', recipes=recipes)
 
     else:
         return render_template('no_results.html',cuisine=cuisine, cost=cost, nutrition=nutrition)

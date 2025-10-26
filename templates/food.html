@@ -2,20 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Recipes for {{ cuisine }}</title>
+    <title>Found Recipes</title>
 </head>
 <body>
-    <h1>Recipes for {{ cuisine }} ({{ diet }})</h1>
+    {% for recipe in recipes %}
 
-    {% if recipes %}
-        <ul>
-            {% for recipe in recipes %}
-                <li>
-                    <h3>{{ recipe.title }}</h3>
-                    <!-- <img src="{{ recipe.image }}" alt="{{ recipe.title }}" width="200"> -->
-                </li>
-            {% endfor %}
-        </ul>
+        <h1>{{ recipe.recipe_stats.recipe_name }}</h1>
+
+        <p>Cooking time: {{ recipe.recipe_stats.cooking_time_minutes }} minutes.</p>
+        <br>
+        <p>This dish serves {{ recipe.recipe_stats_serving_amount }}.</p>
+        <br>
+        <p>{{ recipe.recipe_stats.cooking_time_minutes }} was found on {{ recipe.recipe_stats.recipe_credits }}</p>
+        <br>
+        <p>{{ recipe.recipe_stats.url }}</p>
+
+
+    {% endfor %}
     {% else %}
         <p>No recipes found.</p>
     {% endif %}
