@@ -29,6 +29,8 @@ cuisine = "Italian"
 diet = "healthy"
 expense = "expensive"
 
+##Lines that are double commented out are for team partner to review removing, I believe we do not need them
+
 # Pydantic model for structured recipe output
 # This model defines the expected structure of the recipe data returned by the AI.
 class Recipe(BaseModel):
@@ -39,12 +41,12 @@ def gemini_recipe_chat(cuisine, diet, expense):
     to allow for the response schema to be applied only on the 2nd turn."""
 
     
-    formatted_user_input = f"Give me some {cuisine} recipes that are {diet}, make sure the price is {expense}."
+    ##formatted_user_input = f"Give me some {cuisine} recipes that are {diet}, make sure the price is {expense}."
     try:
         client = genai.Client()
         response = client.models.generate_content(
             model="gemini-2.5-flash",
-            contents=formatted_user_input,
+            ##contents=formatted_user_input,
             config=GenerateContentConfig(
                 system_instruction=system_prompt,
                 response_mime_type="application/json",
@@ -52,7 +54,7 @@ def gemini_recipe_chat(cuisine, diet, expense):
             )
         )
         recipe_list = response.parsed.recipes
-        print(recipe_list)
+        ##print(recipe_list)
     
     except Exception as e:
         print("Sorry, I couldn't understand the response. Please try again.", e)
@@ -61,6 +63,6 @@ def gemini_recipe_chat(cuisine, diet, expense):
 
     return recipe_list
 
-gemini_recipe_chat(cuisine, diet, expense)
+##gemini_recipe_chat(cuisine, diet, expense)
 
 
