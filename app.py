@@ -16,6 +16,9 @@ def get_recipes():
     cost = request.args.get('diet')
     nutrition = request.args.get('recipe')
 
+    if not cuisine:
+        return ' Please enter  a cuisine or region.'
+
     recipe_names = g_client.gemini_recipe_chat(cuisine, cost, nutrition)
 
     key = api.retrieve_key()
@@ -31,28 +34,12 @@ def get_recipes():
             extracted_recipe_information = api.extract_recipe_information(recipe_information)
             flask_recipe_output.append(extracted_recipe_information)
 
+    if flask_recipe_output:
+        return render_template('food.html', flask_recipe_output=flask_recipe_output)
 
-    # if not cuisine:
-    #     return ' Please enter  a cuisine or region.'
-
-
-
-
-    # recipes = []
-    # if 'results' in data_search and data_search['results']:
-    #     for recipe in data_search['results']:
-    #         recipe_info = {
-    #             'title': recipe['title'],
-    #             'images': recipe.get('image', ''),
-    #             'id': recipe['id']
-    #         }
-    #         recipes.append(recipe_info)
-    # else:
-    #     return f'No recipes found for {cuisine} ({diet}). Try a different search.'
-
-   
-
-    # return render_template('food.html', cuisine=cuisine, diet=diet, recipes=recipes)
+    else:
+        return render_template('no_results.html',flask_recipe_output=flask_recipe_output)
+    
 
 
     
