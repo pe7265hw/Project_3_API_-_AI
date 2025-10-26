@@ -16,9 +16,21 @@ def get_recipes():
     cost = request.args.get('diet')
     nutrition = request.args.get('recipe')
 
-    recipe_names = g_client.gemini_recipe_chat()
+    recipe_names = g_client.gemini_recipe_chat(cuisine, cost, nutrition)
+
+    key = api.retrieve_key()
+
+
+    flask_recipe_output = []
     
-    
+    for item in recipe_names:
+        if api.check_for_entries(item) ==  True:
+            recipe_all, recipe_name = api.query_api(key, item)
+            chosen_id = api.parse_api_return(recipe_all, recipe_name)
+            recipe_information = api.retrieve_recipe(key, chosen_id)
+            extracted_recipe_information = api.extract_recipe_information(recipe_information)
+            flask_recipe_output.append(extracted_recipe_information)
+
 
     # if not cuisine:
     #     return ' Please enter  a cuisine or region.'
