@@ -4,11 +4,20 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recipe Recommendations App</title>
+    <title>No Results</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <div id="no_results">
+        <h1>No Results were found</h1>
+        <br><br>
+        <p>Your search for {{ cost }} {{ cuisine }} did not find any recipes, please try something else.</p>
+        <br><br>
+        <button onclick="location.href='templates/index.html'">Try another option</button>
 
+
+    </div>
+    
 
 </body>
 </html>

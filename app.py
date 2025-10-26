@@ -38,7 +38,7 @@ def get_recipes():
         return render_template('food.html', flask_recipe_output=flask_recipe_output)
 
     else:
-        return render_template('no_results.html',flask_recipe_output=flask_recipe_output)
+        return render_template('no_results.html',cuisine=cuisine, cost=cost, nutrition=nutrition)
     
 
 
