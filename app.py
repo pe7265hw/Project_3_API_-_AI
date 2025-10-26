@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 import requests  # NOT the same as requests 
 import os
+import gemini_client as client
 
 app = Flask(__name__)
 
