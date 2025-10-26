@@ -134,6 +134,8 @@ def extract_recipe_information(recipe_request_input):
     recipe_instructions = recipe_request_input['instructions']
     recipe_instructions_clean = recipe_instructions.replace('<ol><li>', "").replace('</ol>', "").replace('</li>,"')
 
+    recipe_image = recipe_request_input['image']
+
     #adds recipe stats first to dictionary
     recipe_information['recipe_stats'] = recipe_stats
 
@@ -147,6 +149,8 @@ def extract_recipe_information(recipe_request_input):
                                  ingredients[i]['unit']]
         
     recipe_information['ingredients'] = merge_dictionary
+
+    recipe_information['picture'] = recipe_image
 
     return recipe_information
 
@@ -169,6 +173,8 @@ Example of recipe_information return
                                             2: ['lemon zest', 1.0, 'teaspoon'], 
                                             3: ['parmigiano-reggiano', 1.0, 'teaspoon'], 
                                             4: ['salt and pepper', 6.0, 'servings'], 
-                                            5: ['tortellini', 0.75, 'cup']}}"""
+                                            5: ['tortellini', 0.75, 'cup']}}
+                                            
+                            {{'picture': 'https://img.spoonacular.com/recipes/634900-556x370.jpg' }}"""
 
 

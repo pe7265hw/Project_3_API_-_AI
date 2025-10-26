@@ -5,9 +5,12 @@
     <title>Found Recipes</title>
 </head>
 <body>
+    <div id="recipe_returns">
     {% for recipe in recipes %}
 
-        <h1>{{ recipe.recipe_stats.recipe_name }}</h1>
+        <h1 id="recipe_name">{{ recipe.recipe_stats.recipe_name }}</h1>
+
+        <img src="{{ recipe.picture }}" alt = 'A picture of {{ recipe.picture }}'>
 
         <p>Cooking time: {{ recipe.recipe_stats.cooking_time_minutes }} minutes.</p>
         <br>
@@ -26,6 +29,7 @@
         <p>{{ recipe.instructions }}</p>
 
     {% endfor %}
+    </div>
 
 </body>
 </html>
