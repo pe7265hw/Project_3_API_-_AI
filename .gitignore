@@ -2,4 +2,4 @@ recipes_output.txt
 __pycache__
 venv
 .venv
-__init__.py
+*.pyc
