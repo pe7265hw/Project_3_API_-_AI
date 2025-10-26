@@ -16,7 +16,7 @@ def retrieve_key():
 def check_for_entries(api_data_input):
     """Validation for input that does not return a result"""
     recipe_results = api_data_input['results']
-    if recipe_results == []:
+    if recipe_results != []:
         return True
     else:
         return False
@@ -82,15 +82,15 @@ def parse_api_return(api_data_input, recipe_name_input):
 
         return shortest_recipe_id
         
-def retrieve_recipes(key_input, id_input):
+def retrieve_recipe(key_input, id_input):
     """Retrieves the recipes based on list of id and formatted for workable output
     This will need to change to alter output to JSON or objects
     :param key_input: environment variable, called from retrieve_key()
     :param id_input: id returned from parse_api_return"""   
     
     #Clears the txt file for new text
-    file_name = 'recipes_output.txt'
-    open(file_name, 'w').close()
+    # file_name = 'recipes_output.txt'
+    # open(file_name, 'w').close()
 
     try:
 
@@ -98,13 +98,13 @@ def retrieve_recipes(key_input, id_input):
         query = {'includeNutrition': 'false', 'addWinePairing': 'false', 'addTastedata': 'false', 
                     'apiKey': key_input}
             
-        data = requests.get(url, params=query).json()
-
-         #parse_recipe_info(data)
+        data = requests.get(url, params=query, timeout=10).json()
 
         # #writes json data to txt as it is too long to view in terminal
-        with open(file_name, 'a') as file:
-            json.dump(data, file, indent=4)
+        # with open(file_name, 'a') as file:
+        #     json.dump(data, file, indent=4)
+
+        return data
 
     except requests.exceptions.Timeout:
         print("Error: The API request timed out.")
@@ -124,4 +124,59 @@ def retrieve_recipes(key_input, id_input):
         print(f"Error: An unhandled exception occurred: {e}")
         return None
 
-#test to make sure pychache statys on .gitignore
+def extract_recipe_information(recipe_request_input):
+    recipe_information = {}
+
+    merge_dictionary = {}
+    
+    recipe_name = recipe_request_input['title']
+    cooking_time = recipe_request_input['readyInMinutes']
+    serving_amount = recipe_request_input['servings']
+    recipe_credit = recipe_request_input['creditsText']
+    recipe_url = recipe_request_input['sourceUrl'] 
+
+    recipe_stats = {'recipe_name': recipe_name, 'cooking_time_minutes': cooking_time, 'serving_amount': serving_amount,
+                    'recipe_credit': recipe_credit, 'url': recipe_url}
+    
+    #Pulls information from requests section of dictionary
+    recipe_instructions = recipe_request_input['instructions']
+
+    #adds recipe stats first to dictionary
+    recipe_information['recipe_stats'] = recipe_stats
+
+    recipe_information['instructions'] = recipe_instructions
+     
+    #shortened for ease of reference
+    ingredients = recipe_request_input['extendedIngredients']
+
+    for i in range(len(ingredients)):
+        merge_dictionary[i]=[ingredients[i]['name'], ingredients[i]['amount'],
+                                 ingredients[i]['unit']]
+        
+    recipe_information['ingredients'] = merge_dictionary
+
+    return recipe_information
+
+
+"""
+Example of recipe_information return
+    recipe_information = {
+                          {recipe_stats: {'recipe_name': 'Tortellini In Brodo', 'cooking_time_minutes': 45,
+                                          'serving_amount': 6, 'recipe_credit': 'Foodista.com – The Cooking 
+                                           Encyclopedia Everyone Can Edit', 
+                                          'url': 'https://www.foodista.com/recipe/RPG7M62J/tortellini-in-brodo'}},
+
+                           {'instructions': '<ol><li>Heat the stock to a boil and 
+                           cook the tortellini. Ladle into bowls, squeeze in lemon 
+                           and stir. Grate cheese and zest on top, and add some 
+                           freshly ground salt and pepper. Serve immediately.
+                           </li></ol>'}
+                           
+                           {{'ingredients': 0: ['chicken stock', 2.0, 'cups'],
+                                            1: ['lemon juice', 1.0, 'teaspoon'], 
+                                            2: ['lemon zest', 1.0, 'teaspoon'], 
+                                            3: ['parmigiano-reggiano', 1.0, 'teaspoon'], 
+                                            4: ['salt and pepper', 6.0, 'servings'], 
+                                            5: ['tortellini', 0.75, 'cup']}}"""
+
+
