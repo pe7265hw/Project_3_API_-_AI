@@ -21,9 +21,9 @@ def get_recipes():
 
     recipes = []
     
-    for item in recipe_names:
-        if api.check_for_entries(item) ==  True:
-            recipe_all, recipe_name = api.query_api(key, item)
+    for item in recipes:
+        recipe_all, recipe_name = api.query_api(key, item)
+        if recipe_all:
             chosen_id = api.parse_api_return(recipe_all, recipe_name)
             recipe_information = api.retrieve_recipe(key, chosen_id)
             extracted_recipe_information = api.extract_recipe_information(recipe_information)

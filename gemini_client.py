@@ -1,14 +1,8 @@
 import logging
 from google import genai
-from google.genai.types import GenerateContentConfig, Content, Part
+from google.genai.types import GenerateContentConfig
 from pydantic import BaseModel
-
-# Set up logging configuration
-logging.basicConfig(level=logging.INFO)
-
-"""If you do not have the gemini API key set up in your enviroment variables, uncomment lines 10 & 11 below and set it directly."""
-# import os
-# os.environ["GEMINI_API_KEY"] = "YOUR_API_KEY"
+import os
 
 def system_prompt_info():
 
@@ -39,6 +33,14 @@ class Recipe(BaseModel):
 def gemini_recipe_chat(cuisine, cost, nutrition):
     """This does not create an actual chat, instead it uses 2 separate GenerateContentConfig calls with different configurations 
     to allow for the response schema to be applied only on the 2nd turn."""
+
+    #Gemini API key read and passed to client and used in response
+    api_key = os.environ.get("GEMINI_API_KEY")
+
+    client = genai.Client(api_key=api_key) 
+
+    # Set up logging configuration
+    logging.basicConfig(level=logging.INFO)
 
     system_prompt = system_prompt_info()
     
