@@ -38,7 +38,7 @@ def gemini_recipe_chat(cuisine, diet, expense):
     """This does not create an actual chat, instead it uses 2 separate GenerateContentConfig calls with different configurations 
     to allow for the response schema to be applied only on the 2nd turn."""
 
-    print('Hello! I\'m your recipe assistant. Tell me what type of foods you like and I will suggest recipes that fit your health and expense choices.')
+    
     formatted_user_input = f"Give me some {cuisine} recipes that are {diet}, make sure the price is {expense}."
     try:
         client = genai.Client()
