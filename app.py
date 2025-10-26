@@ -15,8 +15,12 @@ def get_recipes():
     diet = request.args.get('diet')
     recipe = request.args.get('recipe')
 
-    if not cuisine:
-        return ' Please enter  a cuisine or region.'
+    
+    
+    
+
+    # if not cuisine:
+    #     return ' Please enter  a cuisine or region.'
 
 
 

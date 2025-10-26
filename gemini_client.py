@@ -2,22 +2,26 @@ from google import genai
 from google.genai.types import GenerateContentConfig, Content, Part
 from pydantic import BaseModel
 
-system_prompt = """
-You are a friendly and helpful recipe assistant. Your goal is to provide users with recipes that match their desired cuisine and dietary needs.
+def system_prompt_output():
 
-Follow these steps precisely:
-1.  When the user first specifies a country or region, DO NOT provide recipes immediately.
-2.  Instead, your first response must ALWAYS be to ask them if they have any food allergies or dietary restrictions.
-3.  Once the user responds with their restrictions (or says they have none), then and only then, provide 3 distinct names of
-    recipes that are unique to the specific region or country that the user specified and ENSURE they meet the dietary 
-    needs if any were specified in step 2.
-4.  Format your final response as a JSON object with the following structure:
-    {
-        "name": [list of 3 recipe names],
-        "dietary_restrictions": [list of dietary restrictions or an empty list if none]
-    }
+    system_prompt = """
+    You are a friendly and helpful recipe assistant. Your goal is to provide users with recipes that match their desired cuisine and dietary needs.
 
-"""
+    Follow these steps precisely:
+    1.  When the user first specifies a country or region, DO NOT provide recipes immediately.
+    2.  Instead, your first response must ALWAYS be to ask them if they have any food allergies or dietary restrictions.
+    3.  Once the user responds with their restrictions (or says they have none), then and only then, provide 3 distinct names of
+        recipes that are unique to the specific region or country that the user specified and ENSURE they meet the dietary 
+        needs if any were specified in step 2.
+    4.  Format your final response as a JSON object with the following structure:
+        {
+            "name": [list of 3 recipe names],
+            "dietary_restrictions": [list of dietary restrictions or an empty list if none]
+        }
+
+    """
+
+    return system_prompt
 
 # Pydantic model for structured recipe output
 # This model defines the expected structure of the recipe data returned by the AI.
@@ -28,6 +32,8 @@ class Recipe(BaseModel):
 def gemini_recipe_chat():
     """This does not create an actual chat, instead it uses 2 separate GenerateContentConfig calls with different configurations 
     to allow for the response schema to be applied only on the 2nd turn."""
+
+    system_prompt = system_prompt_output()
     
     client = genai.Client()
     model = "gemini-2.5-flash"
