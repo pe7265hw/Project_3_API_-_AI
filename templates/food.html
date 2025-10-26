@@ -16,11 +16,16 @@
         <p>{{ recipe.recipe_stats.cooking_time_minutes }} was found on {{ recipe.recipe_stats.recipe_credits }}</p>
         <br>
         <p>{{ recipe.recipe_stats.url }}</p>
-
+        <br><br>
+        <ul>
+        {% for key, ingredient in recipe.ingredients.items() %}
+            <li>{{ ingredient[0] }} — {{ ingredient[1] }} {{ ingredient[2] }}</li>
+        {% endfor %}
+        </ul>
+        <br><br>
+        <p>{{ recipe.instructions }}</p>
 
     {% endfor %}
-    {% else %}
-        <p>No recipes found.</p>
-    {% endif %}
+
 </body>
 </html>

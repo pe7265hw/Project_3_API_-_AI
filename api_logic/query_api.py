@@ -88,10 +88,6 @@ def retrieve_recipe(key_input, id_input):
     :param key_input: environment variable, called from retrieve_key()
     :param id_input: id returned from parse_api_return"""   
     
-    #Clears the txt file for new text
-    # file_name = 'recipes_output.txt'
-    # open(file_name, 'w').close()
-
     try:
 
         url = f'https://api.spoonacular.com/recipes/{id_input}/information?'
@@ -99,10 +95,6 @@ def retrieve_recipe(key_input, id_input):
                     'apiKey': key_input}
             
         data = requests.get(url, params=query, timeout=10).json()
-
-        # #writes json data to txt as it is too long to view in terminal
-        # with open(file_name, 'a') as file:
-        #     json.dump(data, file, indent=4)
 
         return data
 
@@ -140,12 +132,13 @@ def extract_recipe_information(recipe_request_input):
     
     #Pulls information from requests section of dictionary
     recipe_instructions = recipe_request_input['instructions']
+    recipe_instructions_clean = recipe_instructions.replace('<ol><li>', "").replace('</ol>', "").replace('</li>,"')
 
     #adds recipe stats first to dictionary
     recipe_information['recipe_stats'] = recipe_stats
 
-    recipe_information['instructions'] = recipe_instructions
-     
+    recipe_information['instructions'] = recipe_instructions_clean
+
     #shortened for ease of reference
     ingredients = recipe_request_input['extendedIngredients']
 
@@ -166,11 +159,10 @@ Example of recipe_information return
                                            Encyclopedia Everyone Can Edit', 
                                           'url': 'https://www.foodista.com/recipe/RPG7M62J/tortellini-in-brodo'}},
 
-                           {'instructions': '<ol><li>Heat the stock to a boil and 
+                           {'instructions': 'Heat the stock to a boil and 
                                             cook the tortellini. Ladle into bowls, squeeze in lemon 
                                             and stir. Grate cheese and zest on top, and add some 
-                                            freshly ground salt and pepper. Serve immediately.
-                                            </li></ol>'}
+                                            freshly ground salt and pepper. Serve immediately.'}
                            
                            {{'ingredients': 0: ['chicken stock', 2.0, 'cups'],
                                             1: ['lemon juice', 1.0, 'teaspoon'], 
