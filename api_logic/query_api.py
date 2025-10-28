@@ -56,9 +56,9 @@ def query_api(key_input, name_input):
 
 
 def parse_api_return(api_data_input, user_provided_recipe_name_input):
-        """Performs a regex search to ensure title is in recipe name then if so searches for middle length
-         recipe name and returns that id
-        to a list to be used by retrieve_recipes
+        """Uses TheFuzz to compare the user input string against the recipe titles returned by Spoonacular
+        the highest percentage return is returned as the ID to be used to retrieve the full recipe information. If the
+        highest match is lower than 40, nothing will be returned, may need to be raised if matches are not same as title
         :param api_data_input: Full dictionary of JSON data retrieved from API using titleMatch call
         :returns: List of recipe ID to call Get Recipe Information"""
 
@@ -79,7 +79,11 @@ def parse_api_return(api_data_input, user_provided_recipe_name_input):
         if spoonacular_user_recipe_similarity_score:
             #the ID of the closest match based on the value (score value set by fuzz) is returned
             closest_match_id = max(spoonacular_user_recipe_similarity_score, key=spoonacular_user_recipe_similarity_score.get())
-            return closest_match_id
+            highest_fuzz_match = max(spoonacular_user_recipe_similarity_score.values())
+            if highest_fuzz_match >= 40 :
+                return closest_match_id
+            else:
+                return None
         else:
             #no matches NONE is returned so rest of code is skipped in function call
             return None
@@ -206,3 +210,20 @@ Example of recipe_information return
                             {{'picture': 'https://img.spoonacular.com/recipes/634900-556x370.jpg' }}"""
 
 
+def retrieve_recipe_information(recipe_names_input):
+    """Used for function calls in app.py
+    :param recipe_names_input: a list of recipes provided by Gemini """
+    key = retrieve_key()
+
+    recipes = []
+    
+    for item in recipe_names_input:
+        recipe_all, recipe_name = query_api(key, item)
+        if recipe_all:
+            chosen_id = parse_api_return(recipe_all, recipe_name)
+            if chosen_id:
+                recipe_information = retrieve_recipe(key, chosen_id)
+                extracted_recipe_information = extract_recipe_information(recipe_information)
+                recipes.append(extracted_recipe_information)
+
+    return recipes

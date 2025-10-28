@@ -16,19 +16,7 @@ def get_recipes():
 
     recipe_names = g_client.gemini_recipe_chat(cuisine, cost, nutrition)
 
-    key = api.retrieve_key()
-
-
-    recipes = []
-    
-    for item in recipe_names:
-        recipe_all, recipe_name = api.query_api(key, item)
-        if recipe_all:
-            chosen_id = api.parse_api_return(recipe_all, recipe_name)
-            if chosen_id:
-                recipe_information = api.retrieve_recipe(key, chosen_id)
-                extracted_recipe_information = api.extract_recipe_information(recipe_information)
-                recipes.append(extracted_recipe_information)
+    recipes = api.retrieve_recipe_information(recipe_names)
 
     if recipes:
         return render_template('food.html', recipes=recipes)
