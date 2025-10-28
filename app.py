@@ -52,7 +52,7 @@ def get_recipes():
         for recipe in data_search['results']:
             recipe_info = {
                 'title': recipe['title'],
-                'images': recipe.get('image', ''),
+                
                 'id': recipe['id']
             }
             recipes.append(recipe_info)
