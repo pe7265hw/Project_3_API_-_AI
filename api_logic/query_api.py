@@ -1,6 +1,7 @@
 import requests
 import os
-from fuzzywuzzy import fuzz
+from thefuzz import fuzz
+from thefuzz import process
 
 def retrieve_key():
         key = os.environ.get('SPOONACULAR_KEY')
@@ -54,21 +55,36 @@ def query_api(key_input, name_input):
         return None
 
 
-def parse_api_return(api_data_input, recipe_name_input):
+def parse_api_return(api_data_input, user_provided_recipe_name_input):
         """Performs a regex search to ensure title is in recipe name then if so searches for middle length
          recipe name and returns that id
         to a list to be used by retrieve_recipes
         :param api_data_input: Full dictionary of JSON data retrieved from API using titleMatch call
         :returns: List of recipe ID to call Get Recipe Information"""
 
+        spoonacular_user_recipe_similarity_score = {}
 
-        
-        
-        
-        
-        
-        
-        
+        for data in api_data_input:
+           #extracts the recipe name and ID from returned json
+           spoonacular_recipe_name = data['title']
+           recipe_id = data['id']
+           
+           #assigns a score based on similarity between user input and recipe name given by Spoonacular
+           similarity_score = fuzz.token_set_ratio(user_provided_recipe_name_input, spoonacular_recipe_name)
+
+           #the recipe id is used as the key and the score as the value in a dictionary
+           spoonacular_user_recipe_similarity_score[recipe_id] = similarity_score
+
+        #if there are any scores
+        if spoonacular_user_recipe_similarity_score:
+            #the ID of the closest match based on the value (score value set by fuzz) is returned
+            closest_match_id = max(spoonacular_user_recipe_similarity_score, key=spoonacular_user_recipe_similarity_score.get())
+            return closest_match_id
+        else:
+            #no matches NONE is returned so rest of code is skipped in function call
+            return None
+
+        ######## This code remains commented out for now incase it needs to be reused for bug fixes  ################    
         
         # recipe_parse_information = {}
 
