@@ -19,21 +19,21 @@ def check_for_entries(spoonacular_data_input):
        
             
 
-def query_spoonacular_search(spoonacular_api_key_input, recipe_name_input):
+def query_spoonacular_search(spoonacular_api_key_input, gemini_provided_recipe_name_input):
     """Retrieves data from API based on user input string
     :param key_input: environment variable, called from retrieve_key()
     :param name_input: input of recipe name that will be queried by the API
     :returns: the full json query for the titleMatch call to API"""
     try:
 
-        underscore_recipe_name_input = recipe_name_input.replace(' ', '_')
+        underscore_recipe_name_input = gemini_provided_recipe_name_input.replace(' ', '_')
 
         url = 'https://api.spoonacular.com/recipes/complexSearch?'
         query = {'titleMatch': underscore_recipe_name_input, 'apiKey': spoonacular_api_key_input}
 
         data = requests.get(url, params=query, timeout=10).json()
         recipe_results = data['results']
-        return recipe_results, recipe_name_input
+        return gemini_provided_recipe_name_input
     
     except requests.exceptions.Timeout:
         print("Error: The API request timed out.")
@@ -54,7 +54,7 @@ def query_spoonacular_search(spoonacular_api_key_input, recipe_name_input):
         return None
 
 
-def pick_id_from_spoonacular_search(all_spoonacular_search_information, user_provided_recipe_name_input):
+def pick_id_from_spoonacular_search(all_spoonacular_search_information, gemini_provided_recipe_name_input):
         """Uses TheFuzz to compare the user input string against the recipe titles returned by Spoonacular
         the highest percentage return is returned as the ID to be used to retrieve the full recipe information. If the
         highest match is lower than 40, nothing will be returned, may need to be raised if matches are not same as title
@@ -69,7 +69,7 @@ def pick_id_from_spoonacular_search(all_spoonacular_search_information, user_pro
            recipe_id = result['id']
            
            #assigns a score based on similarity between user input and recipe name given by Spoonacular
-           similarity_score = fuzz.token_set_ratio(user_provided_recipe_name_input, spoonacular_recipe_name)
+           similarity_score = fuzz.token_set_ratio(gemini_provided_recipe_name_input, spoonacular_recipe_name)
 
            #the recipe id is used as the key and the score as the value in a dictionary
            spoonacular_search_id_user_recipe_similarity_score[recipe_id] = similarity_score
@@ -89,7 +89,7 @@ def pick_id_from_spoonacular_search(all_spoonacular_search_information, user_pro
 
            
         
-def retrieve_recipe(spoonacular_key_input, spoonacular_recipe_search_id_input):
+def spoonacular_get_recipe_information(spoonacular_key_input, spoonacular_recipe_search_id_input):
     """Retrieves the recipes based on list of id and formatted for workable output
     This will need to change to alter output to JSON or objects
     :param key_input: environment variable, called from retrieve_key()
@@ -185,19 +185,19 @@ Example of recipe_information return
                             {{'picture': 'https://img.spoonacular.com/recipes/634900-556x370.jpg' }}"""
 
 
-def retrieve_recipe_information(recipe_names_input):
+def retrieve_recipe_information(gemini_recipe_names_input):
     """Used for function calls in app.py
     :param recipe_names_input: a list of recipes provided by Gemin """
     spoonacular_key = retrieve_spoonacular_key() #Reads the environment variable
 
     recipes = []
     
-    for item in recipe_names_input: #For each recipe name provided by Gemini AI
-        recipe_all, recipe_name = query_spoonacular_search(spoonacular_key, item) #Spoonacular titleMatch Recipe Search is done to retrieve recipes that match
-        if recipe_all: # if any results are found
-            chosen_id = pick_id_from_spoonacular_search(recipe_all, recipe_name) # The ID with the higest match to the users input using The Fuzz dependency is returned
+    for gemini_recipe in gemini_recipe_names_input: #For each recipe name provided by Gemini AI
+        spoonacular_search_hits = query_spoonacular_search(spoonacular_key, gemini_recipe) #Spoonacular titleMatch Recipe Search is done to retrieve recipes that match
+        if spoonacular_search_hits: # if any results are found
+            chosen_id = pick_id_from_spoonacular_search(spoonacular_search_hits, gemini_recipe) # The ID with the higest match to the users input using The Fuzz dependency is returned
             if chosen_id: #If any suitable matches exist
-                recipe_information = retrieve_recipe(spoonacular_key, chosen_id) #Spoonacular Get Recipe Information Search by ID is done using selected ID
+                recipe_information = spoonacular_get_recipe_information(spoonacular_key, chosen_id) #Spoonacular Get Recipe Information Search by ID is done using selected ID
                 extracted_recipe_information = extract_recipe_information(recipe_information) #Returned JSON is parsed to return information that will be displayed to the user
                 recipes.append(extracted_recipe_information) #This information is appended to a main dictionary that contains each recipe that will then be passed to Flask Framework
 
