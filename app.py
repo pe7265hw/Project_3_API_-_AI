@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
-import requests  # NOT the same as requests 
-import os
+import gemini_client as g_client
+from api_logic import query_api as api
 
 app = Flask(__name__)
 
@@ -10,58 +10,32 @@ def homepage():
 
 @app.route('/get_recipes')
 def get_recipes():
-    cuisine = request.args.get('cuisine')
-    diet = request.args.get('diet')
-    recipe = request.args.get('recipe')
+    cuisine = request.args.get('recipe')
+    cost = request.args.get('diet')
+    nutrition = request.args.get('recipe')
 
-    if not cuisine:
-        return ' Please enter  a cuisine or region.'
+    recipe_names = g_client.gemini_recipe_chat(cuisine, cost, nutrition)
 
-    
-    
-        
-    api_key = os.environ.get('SPOONACULAR_API_KEY')
-
-   
-
-    url = "https://api.spoonacular.com/recipes/complexSearch?"
-
-
-    params_search = { 'apiKey':  api_key, 'number': 10}
-    if cuisine:
-        params_search['cuisine'] = cuisine
-    if diet:
-        params_search['diet'] = diet
-    if recipe:
-        params_search['query'] = recipe
-
-
-        
-    try:
-        # Make the API request
-        response = requests.get(url, params=params_search)
-        response.raise_for_status()  # raise exception for HTTP errors
-        data_search = response.json()
-        print("API response:", data_search)
-    except Exception as e:
-        return f"Error making API request: {e}"
+    key = api.retrieve_key()
 
 
     recipes = []
-    if 'results' in data_search and data_search['results']:
-        for recipe in data_search['results']:
-            recipe_info = {
-                'title': recipe['title'],
-                'images': recipe.get('image', ''),
-                'id': recipe['id']
-            }
-            recipes.append(recipe_info)
+    
+    for item in recipe_names:
+        recipe_all, recipe_name = api.query_api(key, item)
+        if recipe_all:
+            chosen_id = api.parse_api_return(recipe_all, recipe_name)
+            if chosen_id:
+                recipe_information = api.retrieve_recipe(key, chosen_id)
+                extracted_recipe_information = api.extract_recipe_information(recipe_information)
+                recipes.append(extracted_recipe_information)
+
+    if recipes:
+        return render_template('food.html', recipes=recipes)
+
     else:
-        return f'No recipes found for {cuisine} ({diet}). Try a different search.'
-
-   
-
-    return render_template('food.html', cuisine=cuisine, diet=diet, recipes=recipes)
+        return render_template('no_results.html',cuisine=cuisine, cost=cost, nutrition=nutrition)
+    
 
 
     

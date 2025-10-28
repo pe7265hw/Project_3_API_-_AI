@@ -2,22 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Recipes for {{ cuisine }}</title>
+    <title>Found Recipes</title>
 </head>
 <body>
-    <h1>Recipes for {{ cuisine }} ({{ diet }})</h1>
+    <div id="recipe_returns">
+    {% for recipe in recipes %}
 
-    {% if recipes %}
+        <h1 id="recipe_name">{{ recipe.recipe_stats.recipe_name }}</h1>
+
+        <img src="{{ recipe.picture }}" alt = 'A picture of {{ recipe.picture }}'>
+
+        <p>Cooking time: {{ recipe.recipe_stats.cooking_time_minutes }} minutes.</p>
+        <br>
+        <p>This dish serves {{ recipe.recipe_stats_serving_amount }}.</p>
+        <br>
+        <p>{{ recipe.recipe_stats.cooking_time_minutes }} was found on {{ recipe.recipe_stats.recipe_credits }}</p>
+        <br>
+        <p>{{ recipe.recipe_stats.url }}</p>
+        <br><br>
         <ul>
-            {% for recipe in recipes %}
-                <li>
-                    <h3>{{ recipe.title }}</h3>
-                    <!-- <img src="{{ recipe.image }}" alt="{{ recipe.title }}" width="200"> -->
-                </li>
-            {% endfor %}
+        {% for key, ingredient in recipe.ingredients.items() %}
+            <li>{{ ingredient[0] }} — {{ ingredient[1] }} {{ ingredient[2] }}</li>
+        {% endfor %}
         </ul>
-    {% else %}
-        <p>No recipes found.</p>
-    {% endif %}
+        <br><br>
+        <p>{{ recipe.instructions }}</p>
+
+    {% endfor %}
+    </div>
+
 </body>
 </html>
