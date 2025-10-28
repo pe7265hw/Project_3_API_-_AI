@@ -78,9 +78,14 @@ def parse_api_return(api_data_input, recipe_name_input):
         #the id attributed to the shortest recipe name is selected, this is done because re.search only selects
         #recipes that match the exact input string, so the shortest match is closest to the exact search string
         #first instance of match is taken in the event two recipe names are the same length
-        shortest_recipe_id = min(recipe_parse_information, key=recipe_parse_information.get)
+        if recipe_parse_information:
+            shortest_recipe_id = min(recipe_parse_information, key=recipe_parse_information.get)
+            return shortest_recipe_id
+        else:
+            return None
+           
 
-        return shortest_recipe_id
+
         
 def retrieve_recipe(key_input, id_input):
     """Retrieves the recipes based on list of id and formatted for workable output
@@ -132,7 +137,7 @@ def extract_recipe_information(recipe_request_input):
     
     #Pulls information from requests section of dictionary
     recipe_instructions = recipe_request_input['instructions']
-    recipe_instructions_clean = recipe_instructions.replace('<ol><li>', "").replace('</ol>', "").replace('</li>,"')
+    recipe_instructions_clean = recipe_instructions.replace('<ol><li>', "").replace('</ol>', "").replace('</li>',"")
 
     recipe_image = recipe_request_input['image']
 

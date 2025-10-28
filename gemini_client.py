@@ -30,6 +30,7 @@ def system_prompt_info():
 class Recipe(BaseModel):
     recipes: list[str]
 
+
 def gemini_recipe_chat(cuisine, cost, nutrition):
     """This does not create an actual chat, instead it uses 2 separate GenerateContentConfig calls with different configurations 
     to allow for the response schema to be applied only on the 2nd turn."""
@@ -44,7 +45,7 @@ def gemini_recipe_chat(cuisine, cost, nutrition):
 
     system_prompt = system_prompt_info()
     
-    formatted_user_input = (f"Give me some {cuisine} recipes that are {cost}, make sure the price is {nutrition}.")
+    formatted_user_input = (f"Give me some {cuisine} recipes that are {nutrition}, make sure the price is {cost}.")
     try:
         client = genai.Client()
         response = client.models.generate_content(
@@ -57,7 +58,7 @@ def gemini_recipe_chat(cuisine, cost, nutrition):
             )
         )
         recipe_list = response.parsed.recipes
-        ##print(recipe_list)
+        # print(recipe_list)
     
     except Exception as e:
         print("Sorry, I couldn't understand the response. Please try again.", e)
@@ -66,6 +67,6 @@ def gemini_recipe_chat(cuisine, cost, nutrition):
 
     return recipe_list
 
-##gemini_recipe_chat(cuisine, diet, expense)
+# gemini_recipe_chat('curry', 'healthy', 'cheap')
 
 
