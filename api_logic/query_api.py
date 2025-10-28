@@ -212,18 +212,18 @@ Example of recipe_information return
 
 def retrieve_recipe_information(recipe_names_input):
     """Used for function calls in app.py
-    :param recipe_names_input: a list of recipes provided by Gemini """
-    key = retrieve_key()
+    :param recipe_names_input: a list of recipes provided by Gemin """
+    spoonacular_key = retrieve_key() #Reads the environment variable
 
     recipes = []
     
-    for item in recipe_names_input:
-        recipe_all, recipe_name = query_api(key, item)
-        if recipe_all:
-            chosen_id = parse_api_return(recipe_all, recipe_name)
-            if chosen_id:
-                recipe_information = retrieve_recipe(key, chosen_id)
-                extracted_recipe_information = extract_recipe_information(recipe_information)
-                recipes.append(extracted_recipe_information)
+    for item in recipe_names_input: #For each recipe name provided by Gemini AI
+        recipe_all, recipe_name = query_api(spoonacular_key, item) #Spoonacular titleMatch Recipe Search is done to retrieve recipes that match
+        if recipe_all: # if any results are found
+            chosen_id = parse_api_return(recipe_all, recipe_name) # The ID with the higest match to the users input using The Fuzz dependency is returned
+            if chosen_id: #If any suitable matches exist
+                recipe_information = retrieve_recipe(spoonacular_key, chosen_id) #Spoonacular Get Recipe Information Search by ID is done using selected ID
+                extracted_recipe_information = extract_recipe_information(recipe_information) #Returned JSON is parsed to return information that will be displayed to the user
+                recipes.append(extracted_recipe_information) #This information is appended to a main dictionary that contains each recipe that will then be passed to Flask Framework
 
     return recipes
