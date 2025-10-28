@@ -1,7 +1,6 @@
 import requests
 import os
-import json
-import re
+from fuzzywuzzy import fuzz
 
 def retrieve_key():
         key = os.environ.get('SPOONACULAR_KEY')
