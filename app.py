@@ -11,15 +11,15 @@ def homepage():
 
 @app.route('/get_recipes')
 def get_recipes():
-    cuisine = request.args.get('recipe')
-    cost = request.args.get('diet')
-    nutrition = request.args.get('recipe')
+    cuisine = request.args.get('cuisine')
+    cost = request.args.get('cost')
+    nutrition = request.args.get('nutrition')
 
     recipe_names = g_client.gemini_recipe_chat(cuisine, cost, nutrition)
 
     recipes = api.retrieve_recipe_information(recipe_names)
 
-    if recipes == []:
+    if len(recipes) == 0:
         return render_template('no_results.html',cuisine=cuisine, cost=cost, nutrition=nutrition)
 
     else:

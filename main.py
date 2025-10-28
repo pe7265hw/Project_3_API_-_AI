@@ -3,7 +3,7 @@ from api_logic import query_api as api
 import gemini_client as g_client
 
 def get_recipes():
-    cuisine = 'chicken'
+    cuisine = 'spaghetti'
     cost = 'cheap'
     nutrition = 'healthy'
 
@@ -14,6 +14,9 @@ def get_recipes():
     if recipes:
         thing = 0
 
+    get_recipes()
+
+def main():
     get_recipes()
 
 main()
