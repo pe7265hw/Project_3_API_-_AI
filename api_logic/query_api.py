@@ -26,14 +26,12 @@ def query_spoonacular_search(spoonacular_api_key_input, gemini_provided_recipe_n
     :returns: the full json query for the titleMatch call to API"""
     try:
 
-        underscore_recipe_name_input = gemini_provided_recipe_name_input.replace(' ', '_')
-
         url = 'https://api.spoonacular.com/recipes/complexSearch?'
-        query = {'titleMatch': underscore_recipe_name_input, 'apiKey': spoonacular_api_key_input}
+        query = {'titleMatch': gemini_provided_recipe_name_input, 'apiKey': spoonacular_api_key_input}
 
         data = requests.get(url, params=query, timeout=10).json()
         recipe_results = data['results']
-        return gemini_provided_recipe_name_input
+        return recipe_results
     
     except requests.exceptions.Timeout:
         print("Error: The API request timed out.")
