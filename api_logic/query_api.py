@@ -78,7 +78,7 @@ def parse_api_return(api_data_input, user_provided_recipe_name_input):
         #if there are any scores
         if spoonacular_user_recipe_similarity_score:
             #the ID of the closest match based on the value (score value set by fuzz) is returned
-            closest_match_id = max(spoonacular_user_recipe_similarity_score, key=spoonacular_user_recipe_similarity_score.get())
+            closest_match_id = max(spoonacular_user_recipe_similarity_score, key=spoonacular_user_recipe_similarity_score.get)
             highest_fuzz_match = max(spoonacular_user_recipe_similarity_score.values())
             if highest_fuzz_match >= 40 :
                 return closest_match_id
