@@ -55,6 +55,8 @@ def gemini_recipe_chat(cuisine, cost, nutrition):
     
     formatted_user_input = (f"Give me some {cuisine} recipes that are {nutrition}, make sure the price is {cost}.")
     try:
+        recipe_list = []
+
         client = genai.Client()
         response = client.models.generate_content(
             model="gemini-2.5-flash",
