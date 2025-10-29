@@ -49,7 +49,8 @@ def gemini_recipe_chat(cuisine, cost, nutrition):
 
     return recipe_list
 
-recipe_list = gemini_recipe_chat('curry', 'healthy', 'cheap')
-print(recipe_list)
+# Uncomment the lines below to test the gemini_recipe_chat function directly
+# recipe_list = gemini_recipe_chat('curry', 'healthy', 'cheap')
+# print(recipe_list)
 
 
