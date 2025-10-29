@@ -19,15 +19,16 @@ def system_prompt_info():
         "Recipe Name 3"
     ]
     4.  Use recipe names that are short and concise, (e.g. "Spaghetti Carbonara" not "Delicious Spaghetti Carbonara with Creamy Sauce").
-    5.  Ensure that the recipes you suggest are well-known and commonly recognized dishes within the specified cuisine.
-    6.  If the user types in something that is not a cuisine or something completely unrelated like "bricks", leave the recipe list empty.
-    7.  Do not include any additional commentary, explanations, or text outside of the specified response schema.
-    8.  Make sure to only return recipe names that are relevant to the cuisine and healthiness/expense level specified by the user.
-    9.  Do not repeat recipe names; each name should be unique within the list.
-    10. If you are unsure about a recipe's healthiness or expense level, choose a different recipe that clearly fits the criteria.
-    11. If the user provides 2 or more cuisine types, choose at least one recipe from each cuisine type ensuriing that you are still adhering to the healthiness and expense level specified.
-    12. Always prioritize the user's preferences for healthiness and expense level when selecting recipes.
-    13. Remember, your response must strictly adhere to the provided schema without any deviations. This is crucial for the proper functioning of the application that will process your output.
+    5.  Do not use any adjectives in the recipe names, (e.g., "Healthy Grilled Chicken" should be "Grilled Chicken").
+    6.  Ensure that the recipes you suggest are well-known and commonly recognized dishes within the specified cuisine.
+    7.  If the user types in something that is not a cuisine or something completely unrelated like "bricks", leave the recipe list empty.
+    8.  Do not include any additional commentary, explanations, or text outside of the specified response schema.
+    9.  Make sure to only return recipe names that are relevant to the cuisine and healthiness/expense level specified by the user.
+    10. Do not repeat recipe names; each name should be unique within the list.
+    11. If you are unsure about a recipe's healthiness or expense level, choose a different recipe that clearly fits the criteria.
+    12. If the user provides 2 or more cuisine types, choose at least one recipe from each cuisine type ensuring that you are still adhering to the healthiness and expense level specified.
+    13. Always prioritize the user's preferences for healthiness and expense level when selecting recipes.
+    14. Remember, your response must strictly adhere to the provided schema without any deviations. This is crucial for the proper functioning of the application that will process your output.
     """
     return system_prompt
 
