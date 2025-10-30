@@ -190,7 +190,7 @@ Example of recipe_information return
 def retrieve_recipe_information(gemini_recipe_names_input):
     """Used for function calls in app.py
     :param gemini_recipe_names_input: a list of recipes provided by Gemin
-     returns a list of dictionary entries containing information on the recipes """
+     returns a list of dictionary entries containing information on the recipes  """
     spoonacular_key = retrieve_spoonacular_key() #Reads the environment variable
 
     recipes = []
