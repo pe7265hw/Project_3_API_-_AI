@@ -1,43 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recipe Recommendations App</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
+{% extends "base.html" %}
 
-    <h1>Recipe Recommendations App</h1>
- 
-    <form action="/get_recipes" method="get">
+{% block content %}
 
-       
-        <label for="cuisine">Enter Cuisine / Region / Food Interest:</label>
-        <input type="text" id="cuisine" name="cuisine" placeholder="e.g. Curry, Italian, Chicken, " required>
-        <br><br>
 
-       
-        <label for="cost">Select how expensive:</label>
-        <select id="cost" name="cost">
-            <option value="cheap">Cheap</option>
-            <option value="affordable">Affordable</option>
-            <option value="expensive">Expensive</option>
-        </select>
-        <br><br>
 
-       
-        <label for="nutrition">Select Nutritional Level:</label>
-        <select id="nutrition" name="nutrition">
-            <option value="healthy">Healthy</option>
-            <option value="moderately_healty">Moderately Nutritous</option>
-            <option value="comfort_food">Comfort Food</option>
-        </select>
-        <br><br>
 
-        <button type="submit">Search Recipes</button>
-    </form>
+<h1>Recipe Recommendations App</h1>
+<h2 id="disclaimer">This information will be sent to Gemini AI and all recipes are provided by Spoonacular API.</h2>
 
-</body>
-</html>
+<form action="/get_recipes" method="get">
+
+    
+    <label for="cuisine">Enter Cuisine / Region / Food Interest:</label>
+    <input type="text" id="cuisine" name="cuisine" placeholder="e.g. Curry, Italian, Chicken, " required>
+    <br><br>
+
+    
+    <label for="cost">Select how expensive:</label>
+    <select id="cost" name="cost">
+        <option value="cheap">Cheap</option>
+        <option value="affordable">Affordable</option>
+        <option value="expensive">Expensive</option>
+    </select>
+    <br><br>
+
+    
+    <label for="nutrition">Select Nutritional Level:</label>
+    <select id="nutrition" name="nutrition">
+        <option value="healthy">Healthy</option>
+        <option value="moderately_healty">Moderately Nutritous</option>
+        <option value="comfort_food">Comfort Food</option>
+    </select>
+    <br><br>
+
+    <button type="submit">Search Recipes</button>
+</form>
+
+
+
+
+{% endblock %}
