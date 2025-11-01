@@ -25,10 +25,10 @@ def get_recipes():
         over_api_call, recipes = api.retrieve_recipe_information(recipe_names)
 
     if over_api_call > 0 or recipe_names == []:
-        return render_template('unexpected_results', recipe_names=recipe_names) #handles no results from Gemini or maxed out API calls
+        return render_template('unexpected_results.html', recipe_names=recipe_names) #handles no results from Gemini or maxed out API calls
 
     if len(recipes) == 0:
-        return render_template('no_results',cuisine=cuisine, cost=cost, nutrition=nutrition) #handles no returns from Spoonacular
+        return render_template('no_results.html',cuisine=cuisine, cost=cost, nutrition=nutrition) #handles no returns from Spoonacular
 
     else:
         return render_template('food.html', recipes=recipes)
