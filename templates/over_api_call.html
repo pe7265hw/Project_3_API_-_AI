@@ -1,0 +1,16 @@
+    {% extends "base.html" %}
+
+    {% block content %}
+
+    <h1>You have reached the limit of API calls for the day.</h1>
+    <b>Unfortunately this application uses the free tier of API access and can only
+        make 50 calls in a day and you have reached that limit.
+    </b>
+    <br><br>
+    <p>Please try again tomorrow.</p>
+    <br><br>
+    <button onclick="location.href='/'">Try another option</button>
+    <br><br>
+
+
+    {% endblock %}
