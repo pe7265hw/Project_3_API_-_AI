@@ -86,14 +86,14 @@ def spoonacular_get_recipe_information(spoonacular_key_input, spoonacular_recipe
     url = f'https://api.spoonacular.com/recipes/{spoonacular_recipe_search_id_input}/information?'
     query = {'includeNutrition': 'false', 'addWinePairing': 'false', 'addTastedata': 'false', 
                     'apiKey': spoonacular_key_input} 
-    recipe_data = {}
+    recipe_data = []
     over_api_call = 0
 
     try:
         recipe_data = requests.get(url, params=query, timeout=10)
         if recipe_data.status_code == 429 or recipe_data.status_code == 402:
             over_api_call += 1
-            recipe_data = {}
+            recipe_data = []
             return over_api_call, recipe_data #If there is a status code of 429 recipe data is reset to a empty dictionary and over_api_call is incremented
         else:
             recipe_data = recipe_data.json()

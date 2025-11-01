@@ -2,15 +2,29 @@
 
     {% block content %}
 
+    {% if recipe_names %}
+
     <h1>You have reached the limit of API calls for the day.</h1>
-    <b>Unfortunately this application uses the free tier of API access and can only
+    <p>Unfortunately this application uses the free tier of API access and can only
         make 50 calls in a day and you have reached that limit.
-    </b>
+    </p>
     <br><br>
     <p>Please try again tomorrow.</p>
     <br><br>
+
+
+    {% else %}
+
+    <h1>Gemini has not given any returns</h1>
+    <p>For whatever reason Gemini has not provided any returns, please return
+        to the home screen and try again
+    </p>
+
+    {% endif %}
+
+
+
+
     <button onclick="location.href='/'">Try another option</button>
     <br><br>
-
-
     {% endblock %}
