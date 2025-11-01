@@ -4,9 +4,12 @@
 
 
     <div id="recipe_returns">
-    {% for recipe in recipes %}
+        <h1>Recipes That Matched Your Search:</h1>
+        <br><br>
 
-        <h1 id="recipe_name">{{ recipe.recipe_stats.recipe_name }}</h1>
+    {% for recipe in recipes %}
+        
+        <h2 id="recipe_name">{{ recipe.recipe_stats.recipe_name }}</h2>
 
         <img src="{{ recipe.picture }}" alt = 'A picture of {{ recipe.recipe_stats.recipe_name }}'>
 
@@ -14,9 +17,9 @@
 
         <p>This dish serves {{ recipe.recipe_stats.serving_amount }} people.</p>
 
-        <p>The recipe for {{ recipe.recipe_stats.recipe_name }} was found on {{ recipe.recipe_stats.recipe_credit }}</p>
+        <p>The recipe for {{ recipe.recipe_stats.recipe_name }} was found on {{ recipe.recipe_stats.recipe_credit }}.</p>
 
-        <p>{{ recipe.recipe_stats.url }}</p>
+        <p><a href="{{ recipe.recipe_stats.url }}">Check out the recipe source here!</a></p>
         <br>
         <p>Recipe Ingredients:</p>
         <br>
@@ -33,4 +36,5 @@
         <button onclick="location.href='/'">Try another option</button>
     </div>
 
+    
     {% endblock %}

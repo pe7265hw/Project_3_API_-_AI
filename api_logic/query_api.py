@@ -141,7 +141,7 @@ def extract_recipe_information(recipe_input):
     
     #Pulls information from requests section of dictionary
     recipe_instructions = recipe_input['instructions']
-    recipe_instructions_clean = recipe_instructions.replace('<ol>', "").replace('<li>',"").replace('</ol>', "").replace('</li>',"")
+    recipe_instructions_clean = recipe_instructions.replace('<ol>', '').replace('<li>','').replace('</ol>', '').replace('</li>','').replace('<b>', '').replace('</b>', '').replace('<span>', '').replace('</span>', '')
 
     recipe_image = recipe_input['image']
 
@@ -199,7 +199,7 @@ def retrieve_recipe_information(gemini_recipe_names_input):
         spoonacular_search_hits = query_spoonacular_search(spoonacular_key, gemini_recipe) #Spoonacular titleMatch Recipe Search is done to retrieve recipes that match
         if spoonacular_search_hits: # if any results are found
             chosen_id = pick_id_from_spoonacular_search(spoonacular_search_hits, gemini_recipe) # The ID with the higest match to the users input using The Fuzz dependency is returned
-            if chosen_id: #If any suitable matches exist
+            if chosen_id != None: #If any suitable matches exist
                 recipe_information = spoonacular_get_recipe_information(spoonacular_key, chosen_id) #Spoonacular Get Recipe Information Search by ID is done using selected ID
                 extracted_recipe_information = extract_recipe_information(recipe_information) #Returned JSON is parsed to return information that will be displayed to the user
                 recipes.append(extracted_recipe_information) #This information is appended to a main dictionary that contains each recipe that will then be passed to Flask Framework
