@@ -17,7 +17,10 @@ def get_recipes():
 
     recipe_names = g_client.gemini_recipe_chat(cuisine, cost, nutrition)
 
-    recipes = api.retrieve_recipe_information(recipe_names)
+    over_api_call, recipes = api.retrieve_recipe_information(recipe_names)
+
+    if over_api_call > 0:
+        return render_template('over_api_call')
 
     if len(recipes) == 0:
         return render_template('no_results.html',cuisine=cuisine, cost=cost, nutrition=nutrition)

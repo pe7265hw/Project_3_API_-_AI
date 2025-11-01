@@ -1,7 +1,6 @@
 import requests
 import os
 from thefuzz import fuzz
-from thefuzz import process
 
 def retrieve_spoonacular_key():
         """Retrieves the Spoonacular API Key"""
@@ -25,27 +24,27 @@ def query_spoonacular_search(spoonacular_api_key_input, gemini_provided_recipe_n
     :param spoonacular_api_key_input: environment variable, called from retrieve_key()
     :param gemini_provided_recipe_name_input: input of recipe name that will be queried by the API
     :returns: the full json return for the query call to API"""
+
+    url = 'https://api.spoonacular.com/recipes/complexSearch?'
+    query = {'query': gemini_provided_recipe_name_input, 'apiKey': spoonacular_api_key_input}
+    recipe_results = {}
+    over_api_call = 0 #used to track overuse of free api key so page can be displayed alerting
+                      #user they can no longer use the app for that day
+
     try:
-
-        url = 'https://api.spoonacular.com/recipes/complexSearch?'
-        query = {'query': gemini_provided_recipe_name_input, 'apiKey': spoonacular_api_key_input}
-
         data = requests.get(url, params=query, timeout=10).json()
-        recipe_results = data.get('results', [])
-        return recipe_results
+        if data.status_code == 429:
+            over_api_call += 1
+            return over_api_call, recipe_results
+        else: 
+            recipe_results = data.get('results', {})
+            return over_api_call, recipe_results
     
     except requests.exceptions.Timeout:
         print("Error: The API request timed out.")
         return None
     except requests.exceptions.ConnectionError:
         print("Error: Could not connect to the API. Check network connection or URL.")
-        return None
-    except requests.exceptions.HTTPError as e:
-        print(f"Error: HTTP error occurred: {e}")
-        return None
-    except requests.exceptions.RequestException as e:
-        # Catch any other requests-related exceptions not specifically handled
-        print(f"Error: An unexpected requests error occurred: {e}")
         return None
     except Exception as e:
         # Catch any other unexpected exceptions
@@ -92,30 +91,28 @@ def pick_id_from_spoonacular_search(all_spoonacular_search_information, gemini_p
 def spoonacular_get_recipe_information(spoonacular_key_input, spoonacular_recipe_search_id_input):
     """Retrieves the recipes from spoonacular based on ID
     :param spoonacular_key_input: environment variable, called from retrieve_key()
-    :param spoonacular_recipe_search_id_input: id returned from parse_api_return"""   
-    
+    :param spoonacular_recipe_search_id_input: id returned from parse_api_return""" 
+
+    url = f'https://api.spoonacular.com/recipes/{spoonacular_recipe_search_id_input}/information?'
+    query = {'includeNutrition': 'false', 'addWinePairing': 'false', 'addTastedata': 'false', 
+                    'apiKey': spoonacular_key_input} 
+    recipe_data = {}
+    over_api_call = 0
+
     try:
-
-        url = f'https://api.spoonacular.com/recipes/{spoonacular_recipe_search_id_input}/information?'
-        query = {'includeNutrition': 'false', 'addWinePairing': 'false', 'addTastedata': 'false', 
-                    'apiKey': spoonacular_key_input}
-            
         recipe_data = requests.get(url, params=query, timeout=10).json()
-
-        return recipe_data
+        if recipe_data.status_code == 429:
+            over_api_call += 1
+            recipe_data = {}
+            return over_api_call, recipe_data #If there is a status code of 429 recipe data is reset to a empty dictionary and over_api_call is incremented
+        else:
+            return over_api_call, recipe_data #If not information from get statement is returned along with over_api_call of zero
 
     except requests.exceptions.Timeout:
         print("Error: The API request timed out.")
         return None
     except requests.exceptions.ConnectionError:
         print("Error: Could not connect to the API. Check network connection or URL.")
-        return None
-    except requests.exceptions.HTTPError as e:
-        print(f"Error: HTTP error occurred: {e}")
-        return None
-    except requests.exceptions.RequestException as e:
-        # Catch any other requests-related exceptions not specifically handled
-        print(f"Error: An unexpected requests error occurred: {e}")
         return None
     except Exception as e:
         # Catch any other unexpected exceptions
@@ -194,14 +191,17 @@ def retrieve_recipe_information(gemini_recipe_names_input):
     spoonacular_key = retrieve_spoonacular_key() #Reads the environment variable
 
     recipes = []
+
     
     for gemini_recipe in gemini_recipe_names_input: #For each recipe name provided by Gemini AI
-        spoonacular_search_hits = query_spoonacular_search(spoonacular_key, gemini_recipe) #Spoonacular titleMatch Recipe Search is done to retrieve recipes that match
-        if len(spoonacular_search_hits) > 0: # if any results are found
-            chosen_id = pick_id_from_spoonacular_search(spoonacular_search_hits, gemini_recipe) # The ID with the higest match to the users input using The Fuzz dependency is returned
-            if chosen_id != None: #If any suitable matches exist
-                recipe_information = spoonacular_get_recipe_information(spoonacular_key, chosen_id) #Spoonacular Get Recipe Information Search by ID is done using selected ID
-                extracted_recipe_information = extract_recipe_information(recipe_information) #Returned JSON is parsed to return information that will be displayed to the user
-                recipes.append(extracted_recipe_information) #This information is appended to a main dictionary that contains each recipe that will then be passed to Flask Framework
+        over_api_call, spoonacular_search_hits = query_spoonacular_search(spoonacular_key, gemini_recipe) #Spoonacular titleMatch Recipe Search is done to retrieve recipes that match
+        if over_api_call == 0: #checks to see if status request for too many API calls, skils rest of function call if yes
+            if len(spoonacular_search_hits) > 0: # if any results are found
+                chosen_id = pick_id_from_spoonacular_search(spoonacular_search_hits, gemini_recipe) # The ID with the higest match to the users input using The Fuzz dependency is returned
+                if chosen_id != None: #If any suitable matches exist
+                    over_api_call, recipe_information = spoonacular_get_recipe_information(spoonacular_key, chosen_id) #Spoonacular Get Recipe Information Search by ID is done using selected ID
+                    if over_api_call == 0: #checks to see if status request for too many API calls, skils rest of function call if yes
+                        extracted_recipe_information = extract_recipe_information(recipe_information) #Returned JSON is parsed to return information that will be displayed to the user
+                        recipes.append(extracted_recipe_information) #This information is appended to a main dictionary that contains each recipe that will then be passed to Flask Framework
 
-    return recipes
+    return over_api_call, recipes
