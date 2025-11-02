@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
-import gemini_client as g_client
-from api_logic import query_api as api
+import gemini_client as gemini_client
+from spoonacular_logic import query_spoonacular as spoonacular
 
 
 app = Flask(__name__)
@@ -18,11 +18,11 @@ def get_recipes():
     cost = request.args.get('cost')
     nutrition = request.args.get('nutrition')
 
-    recipe_names = g_client.gemini_recipe_chat(cuisine, cost, nutrition)
+    recipe_names = gemini_client.gemini_recipe_chat(cuisine, cost, nutrition)
 
     if recipe_names != []:
 
-        over_api_call, recipes = api.retrieve_recipe_information(recipe_names)
+        over_api_call, recipes = spoonacular.retrieve_recipe_information(recipe_names)
 
     if over_api_call > 0 or recipe_names == []:
         return render_template('unexpected_results.html', recipe_names=recipe_names) #handles no results from Gemini or maxed out API calls
