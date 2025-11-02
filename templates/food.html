@@ -1,35 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Found Recipes</title>
-</head>
-<body>
+    {% extends "base.html" %}
+
+    {% block content %}
+
+
     <div id="recipe_returns">
+        <h1>Recipes That Matched Your Search:</h1>
+        <br><br>
+
     {% for recipe in recipes %}
+        
+        <h2 id="recipe_name">{{ recipe.recipe_stats.recipe_name }}</h2>
 
-        <h1 id="recipe_name">{{ recipe.recipe_stats.recipe_name }}</h1>
-
-        <img src="{{ recipe.picture }}" alt = 'A picture of {{ recipe.picture }}'>
+        <img src="{{ recipe.picture }}" alt = 'A picture of {{ recipe.recipe_stats.recipe_name }}'>
 
         <p>Cooking time: {{ recipe.recipe_stats.cooking_time_minutes }} minutes.</p>
+
+        <p>This dish serves {{ recipe.recipe_stats.serving_amount }} people.</p>
+
+        <p>The recipe for {{ recipe.recipe_stats.recipe_name }} was found on {{ recipe.recipe_stats.recipe_credit }}.</p>
+
+        <p><a href="{{ recipe.recipe_stats.url }}">Check out the recipe source here!</a></p>
         <br>
-        <p>This dish serves {{ recipe.recipe_stats_serving_amount }}.</p>
+        <p>Recipe Ingredients:</p>
         <br>
-        <p>{{ recipe.recipe_stats.cooking_time_minutes }} was found on {{ recipe.recipe_stats.recipe_credits }}</p>
-        <br>
-        <p>{{ recipe.recipe_stats.url }}</p>
-        <br><br>
         <ul>
         {% for key, ingredient in recipe.ingredients.items() %}
             <li>{{ ingredient[0] }} — {{ ingredient[1] }} {{ ingredient[2] }}</li>
         {% endfor %}
         </ul>
-        <br><br>
+        <br>
         <p>{{ recipe.instructions }}</p>
+        <br><br>
 
     {% endfor %}
+        <button onclick="location.href='/'">Try another option</button>
+        <br><br><br>
     </div>
 
-</body>
-</html>
+    
+    {% endblock %}

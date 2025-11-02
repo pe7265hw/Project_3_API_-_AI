@@ -1,0 +1,31 @@
+    {% extends "base.html" %}
+
+    {% block content %}
+
+    {% if recipe_names %}
+
+    <h1>You have reached the limit of API calls for the day.</h1>
+    <p>Unfortunately this application uses the free tier of API access and can only
+        make 50 calls in a day and you have reached that limit.
+    </p>
+    <br><br>
+    <p>Please try again tomorrow.</p>
+    <br><br>
+
+
+    {% else %}
+
+    <h1>Gemini has not given any returns</h1>
+    <p>Gemini has not provided any responses based on your input. This may be because what you
+        entered was not considered close enough to a food item or there was an issue connecting
+        to Gemini. Please return to the homepage and try again.
+    </p>
+
+    {% endif %}
+
+
+
+
+    <button onclick="location.href='/'">Darn got it</button>
+    <br><br>
+    {% endblock %}
