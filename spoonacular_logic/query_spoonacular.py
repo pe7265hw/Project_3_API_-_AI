@@ -8,6 +8,28 @@ def retrieve_spoonacular_key():
         return key
 
 
+def check_spoonacular_status_code(url_input, query_input):
+    """I wanted to use this code block to test whether or not the response was valid however I had used up
+    my API calls for the day. It only resets after a 24 hour period and I had used them up late Saturday
+    night and I did not want to start implementing this if I was unable to test it incase I broke the code.
+    I also tried creating a new API Key with a new email but this did not solve the problem, I was still getting
+    blocked by the 402 status code.
+    My plan was to pass the status code instead of over_api_call and also return numbers for any exceptions
+    so unexpected results would know what to display to the user based on the number range for status codes
+    or exact number for over api usage or exceptions like timeout exception."""
+    data = requests.get(url_input, params=query_input, timeout=10)
+    spoonacular_status_code = data.status_code
+    if spoonacular_status_code == 429 or data.status_code == 402:
+        return spoonacular_status_code, []
+    elif spoonacular_status_code >= 400 or spoonacular_status_code < 600:
+        return spoonacular_status_code, []
+    elif spoonacular_status_code == 200:
+        data = data.json()
+        recipe_results = data.get('results', [])
+        return spoonacular_status_code, recipe_results
+
+
+
 def query_spoonacular_search(spoonacular_api_key_input, gemini_provided_recipe_name_input):
     """Retrieves data from API based on user input string
     :param spoonacular_api_key_input: environment variable, called from retrieve_key()
