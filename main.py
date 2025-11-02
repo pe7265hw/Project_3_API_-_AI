@@ -1,6 +1,6 @@
 from api_logic import query_api as api
 
-import gemini_client as g_client
+import gemini.gemini_client as g_client
 
 def get_recipes():
     cuisine = 'spaghetti'
