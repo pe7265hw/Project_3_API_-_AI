@@ -1,0 +1,19 @@
+This file containes a working list of examples to create Python unit tests. Each item begins with the name of the function to test followed by the specific parameters for the test.  
+
+1. Test gemini_chat() to see if a valid response is recieveied
+2. Test gemini_chat() to ensure a blank list is returned if a 'nonsense' cuisine type is entered 
+3. Test test_spoonacular_ststus_code() to ensure various status codes are returned depending on the input
+4. Test query_spoonacular_search() to ensure a valid list is returned if valid recipe names are entered 
+5. Test retrieve_spoonacular_key() to ensure a valid API key is returned 
+6. Test pick_id_from_spoonacular_search() to ensure a valid ID is returned
+7. Test pick_id_from_spoonacular_search() to ensure NONE is retunred if the match is less than 40
+8. spoonacular_get_recipe_information() ensure JSON response is returned
+9. extract_recipe_information() ensure a dictionary object is returned 
+10. gemini_chat() ensure the gemini_system_instructions.txt is opened and read and saved as gemini_system_instructions
+11. gemini_chat() ensure a succesfull conection is made to the Gemini API
+12. pick_id_from_spoonacular_search ensure a valid id and title are retrieved from 'all_spoonacular_search_information'
+13. extract_recipe_information() ensure a valid recipe returns a value for each specified key
+14. retrieve_recipe_information() to ensure a list of dictionary's are returned
+15. retrieve_recipe_information() to ensure a status code 402 changes over_api_call to 1
+
+

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-import gemini_client as gemini_client
+import gemini.gemini_client as gemini_client
 from spoonacular_logic import query_spoonacular as spoonacular
 
 
