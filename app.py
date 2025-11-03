@@ -2,6 +2,10 @@ from flask import Flask, render_template, request
 import gemini.gemini_client as gemini_client
 from spoonacular_logic import query_spoonacular as spoonacular
 
+#####################################################################################
+# BEFORE RUNNING APP CHANGE OPEN STATEMENT AT TOP OF gemini_client.py
+#####################################################################################
+
 
 app = Flask(__name__)
 
@@ -31,7 +35,7 @@ def get_recipes():
         return render_template('no_results.html',cuisine=cuisine, cost=cost, nutrition=nutrition) #handles no returns from Spoonacular
 
     else:
-        return render_template('food.html', recipes=recipes)
+        return render_template('food.html', recipes=recipes) # if all results are successfully returned they are displayed here
     
 
             

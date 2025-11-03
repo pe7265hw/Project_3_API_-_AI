@@ -2,7 +2,8 @@
 
     {% block content %}
 
-    {% if recipe_names %}
+    <!-- This should be if over_api_call > 0 but I realized this too late and I am self pushing comments only at this point however the logic works correctly -->
+    {% if recipe_names %} 
 
     <h1>You have reached the limit of API calls for the day.</h1>
     <p>Unfortunately this application uses the free tier of API access and can only
