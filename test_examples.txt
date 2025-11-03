@@ -1,4 +1,4 @@
-Unit test examples 
+This file containes a working list of examples to create Python unit tests. Each item begins with the name of the function to test followed by the specific parameters for the test.  
 
 1. Test gemini_chat() to see if a valid response is recieveied
 2. Test gemini_chat() to ensure a blank list is returned if a 'nonsense' cuisine type is entered 
@@ -17,6 +17,3 @@ Unit test examples
 15. retrieve_recipe_information() to ensure a status code 402 changes over_api_call to 1
 
 
-ex.
-class TestGeminiResponse(unittest,TestCase):
-    def test_good_
