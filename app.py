@@ -2,9 +2,6 @@ from flask import Flask, render_template, request
 import gemini.gemini_client as gemini_client
 from spoonacular_logic import query_spoonacular as spoonacular
 
-#####################################################################################
-# BEFORE RUNNING APP CHANGE OPEN STATEMENT AT TOP OF gemini_client.py
-#####################################################################################
 
 
 app = Flask(__name__)

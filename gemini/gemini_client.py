@@ -5,19 +5,8 @@ from pydantic import BaseModel
 import os
 
 # Open the gemini_system_instructions.txt file and save it as a variable to pass to the gemini response
-
-############################ ABSOLUTELY CRITICAL CHANGE HERE WHEN RUNNING APP ###########################
-
-# I accidentally created a subfolder for the project when dowloading the repository so I need the open
-# line as it is, change statements when running in your own directory, comment out my open statement
-
-with open('Project_3_API_-_AI/gemini/gemini_system_instructions.txt', 'r') as file:
+with open('gemini/gemini_system_instructions.txt', 'r') as file:
     gemini_instructions = file.read()
-
-#with open('gemini/gemini_system_instructions.txt', 'r') as file:
-    #gemini_instructions = file.read()
-
-##########################################################################################################
 
 # Pydantic model for structured recipe output
 # This model defines the expected structure of the recipe data returned by the AI.
