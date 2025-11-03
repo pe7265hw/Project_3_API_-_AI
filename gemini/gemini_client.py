@@ -3,6 +3,11 @@ from google import genai
 from google.genai.types import GenerateContentConfig
 from pydantic import BaseModel
 import os
+import requests
+import json
+
+ # Set up logging configuration
+logging.basicConfig(level=logging.INFO)
 
 # Open the gemini_system_instructions.txt file and save it as a variable to pass to the gemini response
 with open('gemini/gemini_system_instructions.txt', 'r') as file:
@@ -22,13 +27,12 @@ def gemini_recipe_chat(cuisine, cost, nutrition):
     #Gemini API key read and passed to client and used in response
     api_key = os.environ.get("GEMINI_API_KEY")
 
+    # Create a gemini client object
     client = genai.Client(api_key=api_key) 
-
-    # Set up logging configuration
-    logging.basicConfig(level=logging.INFO)
     
     formatted_user_input = (f"Give me some {cuisine} recipes that are {nutrition}, make sure the price is {cost}.")
     try:
+        # Initialize a blank list to store recipes returned by gemini
         recipe_list = []
 
         client = genai.Client()
@@ -41,13 +45,20 @@ def gemini_recipe_chat(cuisine, cost, nutrition):
                 response_schema=Recipe
             )
         )
+        # Parse the gemini response to get the contents of the list
         recipe_list = response.parsed.recipes
-        # print(recipe_list)
+
+        # Log the response from gemini
+        logging.info(recipe_list)
     
+    except ValueError as e:
+        logging.error(f'Value error occured: {e}')
     except Exception as e:
-        print("Sorry, I couldn't understand the response. Please try again.", e)
-    except ValueError as ve:
-        print("The response format was incorrect:", ve)
+        logging.error(f'An exception occured: {e}')
+    except requests.exceptions.ConnectionError as e:
+        logging.error(f'A connection error occured with the Gemini API: {e}')
+    except json.JSONDecodeError as e:
+        logging.error(f'A json decoding error occured {e}')
 
     return recipe_list
 
