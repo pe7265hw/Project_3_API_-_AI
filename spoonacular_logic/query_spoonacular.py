@@ -19,11 +19,11 @@ def check_spoonacular_status_code(url_input, query_input):
     or exact number for over api usage or exceptions like timeout exception."""
     data = requests.get(url_input, params=query_input, timeout=10)
     spoonacular_status_code = data.status_code
-    if spoonacular_status_code == 429 or data.status_code == 402:
+    if spoonacular_status_code == 429 or data.status_code == 402: # catches status for over usage limit of API
         return spoonacular_status_code, []
-    elif spoonacular_status_code >= 400 or spoonacular_status_code < 600:
+    elif spoonacular_status_code >= 400 or spoonacular_status_code < 600: # catches status for server or connection error
         return spoonacular_status_code, []
-    elif spoonacular_status_code == 200:
+    elif spoonacular_status_code == 200: # if successful data turned into JSON and returned
         data = data.json()
         recipe_results = data.get('results', [])
         return spoonacular_status_code, recipe_results
@@ -38,17 +38,16 @@ def query_spoonacular_search(spoonacular_api_key_input, gemini_provided_recipe_n
 
     url = 'https://api.spoonacular.com/recipes/complexSearch?'
     query = {'query': gemini_provided_recipe_name_input, 'apiKey': spoonacular_api_key_input}
-    recipe_results = []
-    over_api_call = 0 #used to track overuse of free api key so page can be displayed alerting
-                      #user they can no longer use the app for that day
+    recipe_results = [] # tracks results
+    over_api_call = 0  # used to track if over api calls
 
     try:
         data = requests.get(url, params=query, timeout=10)
-        if data.status_code == 429 or data.status_code == 402:
-            over_api_call += 1
+        if data.status_code == 429 or data.status_code == 402: # if user is over API limit
+            over_api_call += 1 # variable is then incremented for check in retrieve_recipe_information()
             return over_api_call, recipe_results
         else:
-            data = data.json()
+            data = data.json() # if successful information is converted to JSON and reduced to useful data
             recipe_results = data.get('results', [])
             return over_api_call, recipe_results
     
@@ -67,7 +66,7 @@ def query_spoonacular_search(spoonacular_api_key_input, gemini_provided_recipe_n
 def pick_id_from_spoonacular_search(all_spoonacular_search_information, gemini_provided_recipe_name_input):
         """Uses TheFuzz to compare the user input string against the recipe titles returned by Spoonacular
         the highest percentage return is returned as the ID to be used to retrieve the full recipe information. If the
-        highest match is lower than 40, nothing will be returned, may need to be raised if matches are not same as title
+        highest match is lower than 40, nothing will be returned
         :param all_spoonacular_search_information: Full dictionary of JSON data retrieved from API using titleMatch call
         : param gemini_provided_recipe_name_input: name of the recipe as provided by Gemini
         :returns: The ID of the recipe that closest matches the recipe provided by Gemini"""
@@ -90,7 +89,7 @@ def pick_id_from_spoonacular_search(all_spoonacular_search_information, gemini_p
             #the ID of the closest match based on the value (score value set by fuzz) is returned
             closest_match_recipe_id = max(recipe_id_similarity_score, key=recipe_id_similarity_score.get)
             highest_fuzz_match = max(recipe_id_similarity_score.values())
-            if highest_fuzz_match >= 40 :
+            if highest_fuzz_match >= 40 : # if the match is greater than 40 it will be returned
                 return closest_match_recipe_id
             else:
                 return None
@@ -113,13 +112,13 @@ def spoonacular_get_recipe_information(spoonacular_key_input, spoonacular_recipe
 
     try:
         recipe_data = requests.get(url, params=query, timeout=10)
-        if recipe_data.status_code == 429 or recipe_data.status_code == 402:
+        if recipe_data.status_code == 429 or recipe_data.status_code == 402: # same logic as explained in query_spoonacular_search()
             over_api_call += 1
             recipe_data = []
-            return over_api_call, recipe_data #If there is a status code of 429 recipe data is reset to a empty dictionary and over_api_call is incremented
+            return over_api_call, recipe_data 
         else:
             recipe_data = recipe_data.json()
-        return over_api_call, recipe_data #If not information from get statement is returned along with over_api_call of zero
+        return over_api_call, recipe_data 
 
     except requests.exceptions.Timeout:
         print("Error: The API request timed out.")
@@ -141,35 +140,39 @@ def extract_recipe_information(recipe_input):
 
     merge_dictionary = {}
     
-    recipe_name = recipe_input.get('title', '')
-    cooking_time = recipe_input.get('readyInMinutes', '')
-    serving_amount = recipe_input.get('servings', '')
-    recipe_credit = recipe_input.get('creditsText', '')
-    recipe_url = recipe_input.get('sourceUrl', '') 
+    recipe_name = recipe_input.get('title', '') # recipe name
+    cooking_time = recipe_input.get('readyInMinutes', '') # cooking time
+    serving_amount = recipe_input.get('servings', '') # serving amount
+    recipe_credit = recipe_input.get('creditsText', '') # name of website where recipe was found
+    recipe_url = recipe_input.get('sourceUrl', '') # direct URL for recipe
 
     recipe_stats = {'recipe_name': recipe_name, 'cooking_time_minutes': cooking_time, 'serving_amount': serving_amount,
                     'recipe_credit': recipe_credit, 'url': recipe_url}
     
-    #Pulls information from requests section of dictionary
+    # Pulls information from requests section of dictionary
     recipe_instructions = recipe_input['instructions']
     recipe_instructions_clean = recipe_instructions.replace('<ol>', '').replace('<li>','').replace('</ol>', '').replace('</li>','').replace('<b>', '').replace('</b>', '').replace('<span>', '').replace('</span>', '')
 
     recipe_image = recipe_input.get('image', '')
 
-    #adds recipe stats first to dictionary
+    # adds recipe stats first to dictionary
     recipe_information['recipe_stats'] = recipe_stats
 
+    # instructions added second
     recipe_information['instructions'] = recipe_instructions_clean
 
     #shortened for ease of reference
     ingredients = recipe_input['extendedIngredients']
 
+    # ingredients put in dictionary with number as key
     for i in range(len(ingredients)):
         merge_dictionary[i]=[ingredients[i]['name'], ingredients[i]['amount'],
                                  ingredients[i]['unit']]
-        
+
+    # ingredients added third   
     recipe_information['ingredients'] = merge_dictionary
 
+    # picture added fourth
     recipe_information['picture'] = recipe_image
 
     return recipe_information
@@ -197,7 +200,7 @@ Example of recipe_information return
                                             
                             {{'picture': 'https://img.spoonacular.com/recipes/634900-556x370.jpg' }}"""
 
-
+#This function is only to be called in app.py
 def retrieve_recipe_information(gemini_recipe_names_input):
     """Used for function calls in app.py
     :param gemini_recipe_names_input: a list of recipes provided by Gemin
