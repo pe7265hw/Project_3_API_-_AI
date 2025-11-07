@@ -136,6 +136,8 @@ def extract_recipe_information(recipe_input):
     """Pulls the information from the recipe that will be used for display to the user and formats it in a dictionary
     :param recipe_input: the recipe chose by TheFuzz that is the closest match to the Gemini provided recipe information
     returns: A dictionary object with the information desired to display to the user, example given below function"""
+    print(recipe_input)
+    
     recipe_information = {}
 
     merge_dictionary = {}
